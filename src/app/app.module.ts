@@ -7,6 +7,9 @@ import { BasicHeaderComponent } from './shared/components/basic-header/basic-hea
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -14,11 +17,14 @@ import { RegisterComponent } from './pages/register/register.component';
     BasicHeaderComponent,
     FooterComponent,
     NotFoundComponent,
-    RegisterComponent
+    RegisterComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
