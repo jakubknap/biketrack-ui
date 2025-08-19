@@ -28,6 +28,28 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# STS
+.apt_generated
+.factorypath
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+*.dylip
+
+# NetBeans
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
