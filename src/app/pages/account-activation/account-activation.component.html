@@ -1,0 +1,127 @@
+<div class="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col">
+
+    <app-basic-header></app-basic-header>
+
+    <main class="flex-grow flex items-center justify-center px-4">
+        <div class="w-full max-w-lg mt-6 sm:mt-8 bg-white shadow-xl rounded-xl p-8 text-center">
+
+            <ng-container [ngSwitch]="viewState">
+
+                <div *ngSwitchCase="ViewState.ACTIVATING">
+                    <h2 class="text-3xl font-bold mb-3 text-gray-800">
+                        Aktywacja konta
+                    </h2>
+
+                    <p class="text-sm text-gray-600 mb-8">
+                        Sprawdzamy Twój link i przygotowujemy konto do startu 🚴‍♂️
+                    </p>
+
+                    <div class="flex flex-col items-center">
+                        <svg class="animate-spin h-10 w-10 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        <p class="text-gray-600">Trwa aktywacja Twojego konta...</p>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="ViewState.ACTIVATED">
+                    <div class="mx-auto mb-4 bg-green-100 text-green-600 rounded-full w-20 h-20 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+
+                    <h1 class="text-2xl font-bold text-green-800 mb-2">Konto aktywowane!</h1>
+                    <p class="text-gray-600 mb-6">{{ message }}</p>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a routerLink="/login" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition text-center w-full sm:w-auto">
+                            Przejdź do logowania
+                        </a>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="ViewState.ACTIVATION_ERROR">
+                    <div class="mx-auto mb-4 bg-red-100 text-red-600 rounded-full w-20 h-20 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+
+                    <h1 class="text-2xl font-bold text-red-800 mb-2">Nie udało się aktywować konta</h1>
+                    <p class="text-gray-600 mb-6">{{ message }}</p>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a routerLink="/" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition text-center w-full sm:w-auto">
+                            Wróć do strony głównej
+                        </a>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="ViewState.ACTIVATION_EXPIRED">
+                    <div class="mx-auto mb-4 bg-yellow-100 text-yellow-600 rounded-full w-20 h-20 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                        </svg>
+                    </div>
+
+                    <h1 class="text-2xl font-bold text-yellow-800 mb-2">Link wygasł</h1>
+                    <p class="text-gray-600 mb-6">{{ message }}</p>
+
+                    <button (click)="resendActivationLink()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition">
+                        Wyślij nowy link
+                    </button>
+                </div>
+
+                <div *ngSwitchCase="ViewState.RESENDING">
+                    <h2 class="text-3xl font-bold mb-3 text-gray-800">
+                        Ponowna wysyłka linku aktywacyjnego
+                    </h2>
+
+                    <div class="flex flex-col items-center">
+                        <svg class="animate-spin h-10 w-10 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+
+                        <p class="text-gray-600">Wysyłamy nowy link aktywacyjny do Twojego konta...</p>
+                    </div>
+                </div>
+
+                <div *ngSwitchCase="ViewState.RESEND_SUCCESS">
+                    <div class="mx-auto mb-4 bg-green-100 text-green-600 rounded-full w-20 h-20 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+
+                    <h1 class="text-2xl font-bold text-green-800 mb-2">Nowy link aktywacyjny został wysłany!</h1>
+                    <p class="text-gray-600 mb-6">
+                        Sprawdź swoją skrzynkę e-mail i aktywuj konto, aby móc się zalogować
+                    </p>
+                </div>
+
+                <div *ngSwitchCase="ViewState.RESEND_ERROR">
+                    <div class="mx-auto mb-4 bg-red-100 text-red-600 rounded-full w-20 h-20 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+
+                    <h1 class="text-2xl font-bold text-red-800 mb-2">Nie udało się ponownie wysłać nowego linku aktywacyjnego</h1>
+                    <p class="text-gray-600 mb-6">{{ message }}</p>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a routerLink="/" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition text-center w-full sm:w-auto">
+                            Wróć do strony głównej
+                        </a>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </main>
+
+    <app-footer></app-footer>
+
+</div>

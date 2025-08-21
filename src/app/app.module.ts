@@ -10,6 +10,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
+import { AccountActivationComponent } from './pages/account-activation/account-activation.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { SpinnerComponent } from './shared/components/spinner/spinner.component'
     FooterComponent,
     NotFoundComponent,
     RegisterComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    AccountActivationComponent
   ],
   imports: [
     BrowserModule,
