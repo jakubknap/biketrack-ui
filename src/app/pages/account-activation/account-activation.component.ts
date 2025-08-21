@@ -101,6 +101,8 @@ export class AccountActivationComponent implements OnInit {
         return 'Nie znaleziono linku aktywacyjnego w systemie. Być może został on zmieniony lub jest błędny.';
       case 'E04002':
         return 'Twój link aktywacyjny został unieważniony. Skontaktuj się z nami, jeżeli uważasz że to błąd.';
+      case 'E04003':
+        return 'Link aktywacyjny jest nieprawidłowy. Upewnij się, że korzystasz z linku otrzymanego w wiadomości e-mail.';
       case 'E04004':
         return 'Twój link aktywacyjny został już wykorzystany.';
       default:

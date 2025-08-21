@@ -100,6 +100,13 @@
                     <p class="text-gray-600 mb-6">
                         Sprawdź swoją skrzynkę e-mail i aktywuj konto, aby móc się zalogować
                     </p>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a routerLink="/"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition text-center w-full sm:w-auto">
+                            Wróć do strony głównej
+                        </a>
+                    </div>
                 </div>
 
                 <div *ngSwitchCase="ViewState.RESEND_ERROR">
