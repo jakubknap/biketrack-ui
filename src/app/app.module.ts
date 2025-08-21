@@ -11,6 +11,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { AccountActivationComponent } from './pages/account-activation/account-activation.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { AccountActivationComponent } from './pages/account-activation/account-a
     NotFoundComponent,
     RegisterComponent,
     SpinnerComponent,
-    AccountActivationComponent
+    AccountActivationComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

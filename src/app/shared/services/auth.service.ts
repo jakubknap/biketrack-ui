@@ -5,6 +5,7 @@ import { catchError, Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-response';
 import { RegisterRequest } from 'src/app/pages/register/model/register-request';
 import { ResendTokenRequest } from '../models/resend-token-request';
+import { ResetPasswordRequest } from 'src/app/pages/forgot-password/model/reset-password-request';
 
 @Injectable({
     providedIn: 'root'
@@ -31,6 +32,12 @@ export class AuthService extends BaseService {
 
     resendToken(resendTokenRequest: ResendTokenRequest): Observable<BaseResponse> {
         return this.http.post<BaseResponse>(`${this.baseUrl}/${this.authPrefix}/resend-token`, resendTokenRequest).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    resetPasswordRequest(resetPasswordRequest: ResetPasswordRequest): Observable<BaseResponse> {
+        return this.http.post<BaseResponse>(`${this.baseUrl}/${this.authPrefix}/password-reset/request`, resetPasswordRequest).pipe(
             catchError(this.handleError)
         );
     }
