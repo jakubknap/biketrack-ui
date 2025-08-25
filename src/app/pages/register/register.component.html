@@ -59,7 +59,7 @@
                             <div *ngIf="password.errors['required']">Hasło jest wymagane</div>
                             <div *ngIf="password.errors['minlength']">Hasło musi mieć min. 8 znaków</div>
                             <div *ngIf="password.errors['maxlength']">Hasło musi mieć max. 100 znaków</div>
-                            <div *ngIf="password.errors['pattern']">Hasło musi mieć małą i dużą literę, cyfrę i znak specjalny</div>
+                            <div *ngIf="password.errors['pattern']">Hasło musi zawierać małą i dużą literę, cyfrę i znak specjalny</div>
                             <div *ngIf="password.errors['backend']">{{ password.errors['backend'] }}</div>
                         </div>
                     </div>
