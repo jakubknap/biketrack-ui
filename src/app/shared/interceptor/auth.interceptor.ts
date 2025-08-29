@@ -19,13 +19,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const accessToken = this.tokenService.getAccessToken();
-
-        if (!accessToken || req.url.includes('/api/v1/auth')) {
+        if (req.url.includes('/api/v1/auth')) {
             return next.handle(req);
         }
 
-        req = this.addTokenHeader(req, accessToken);
+        const accessToken = this.tokenService.getAccessToken();
+        req = this.addTokenHeader(req, accessToken!);
 
         return next.handle(req).pipe(catchError((error) => {
             if (error instanceof HttpErrorResponse && error.status === 401) {
@@ -57,8 +56,8 @@ export class AuthInterceptor implements HttpInterceptor {
                 catchError((err) => {
                     this.isRefreshing = false;
                     this.tokenService.deleteTokens();
-                    this.sessionService.notifyLogout('Twoja sesja wygasła. Zaloguj się ponownie.');
                     this.logoutService.logout();
+                    this.sessionService.notifyLogout('Twoja sesja wygasła. Zaloguj się ponownie.');
                     return throwError(() => err);
                 })
             );
