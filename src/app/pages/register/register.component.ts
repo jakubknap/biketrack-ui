@@ -69,7 +69,7 @@ export class RegisterComponent implements OnInit {
           }
         }
       });
-    }, 1000);
+    }, 500);
   }
 
   private mapFormToRequest(): RegisterRequest {

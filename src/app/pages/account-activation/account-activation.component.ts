@@ -56,7 +56,7 @@ export class AccountActivationComponent implements OnInit {
           }
         }
       })
-    }, 2000);
+    }, 1000);
   }
 
   resendActivationLink() {
@@ -74,7 +74,7 @@ export class AccountActivationComponent implements OnInit {
           this.message = this.mapErrorMessageForResend(error.status);
         }
       })
-    }, 1500);
+    }, 800);
   }
 
   private get token(): string | null {

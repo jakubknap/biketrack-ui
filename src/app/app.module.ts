@@ -14,6 +14,8 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
     AccountActivationComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    LoginComponent
+    LoginComponent,
+    LandingPageComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -60,7 +60,7 @@ export class ForgotPasswordComponent implements OnInit {
           }
         }
       });
-    }, 1500);
+    }, 1000);
   }
 
   private mapFormToRequest(): ResetPasswordRequest {

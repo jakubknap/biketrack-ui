@@ -99,6 +99,7 @@ export class LoginComponent implements OnInit {
   private mapErrorMessage(status: string): string {
     switch (status) {
       case 'E02000':
+      case 'E03001':
         return 'Nieprawidłowy e-mail lub hasło.';
       case 'E02001':
         return 'Twoje konto jest nieaktywne. Skontaktuj się z administratorem.';
@@ -108,8 +109,6 @@ export class LoginComponent implements OnInit {
         return 'Twoje konto wygasło. Skontaktuj się z administratorem.';
       case 'E02004':
         return 'Twoje hasło wygasło. Ustaw nowe hasło, aby się zalogować.';
-      case 'E03001':
-        return 'Nie znaleziono użytkownika o podanym adresie e-mail.';
       case 'E03002':
         return 'Twoje konto nie zostało jeszcze aktywowane. Sprawdź pocztę e-mail i aktywuj konto.';
       default:

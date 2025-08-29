@@ -146,6 +146,10 @@ export class ResetPasswordComponent implements OnInit {
     switch (status) {
       case 'E00005':
         return 'Link resetujący hasło jest nieprawidłowy. Upewnij się, że korzystasz z linku otrzymanego w wiadomości e-mail.';
+      case 'E03004':
+        return 'Hasła nie są takie same.';
+      case 'E03005':
+        return 'Nowe hasło nie może być takie samo jak aktualne hasło.';
       case 'E04000':
         return 'Nie znaleziono linku resetującego hasło w systemie. Być może został on zmieniony lub jest błędny.';
       case 'E04002':

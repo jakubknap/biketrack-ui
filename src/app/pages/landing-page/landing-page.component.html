@@ -1,0 +1,70 @@
+<div class="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col">
+
+    <nav class="bg-white/80 backdrop-blur border-b border-gray-200 shadow-sm px-4 py-3">
+        <div class="max-w-6xl mx-auto flex justify-center">
+            <div class="text-2xl font-extrabold text-blue-600 tracking-wide">
+                <a routerLink="/">BikeTrack</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow px-4">
+        <div class="w-full max-w-6xl mt-12 sm:mt-16 flex flex-col lg:flex-row items-center gap-12 mx-auto">
+
+            <div class="flex-1 text-left">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-blue-600 mb-4 sm:mb-6">
+                    Monitoruj, Serwisuj i Analizuj swoje rowery
+                </h1>
+                <p class="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 max-w-full sm:max-w-md lg:max-w-lg text-gray-700">
+                    BikeTrack pomaga rowerzystom dbać o swoje jednoślady – rejestruj naprawy, śledź koszty, przeglądaj historię serwisową i zarządzaj wszystkimi rowerami w jednym miejscu.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <a routerLink="/register" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 sm:py-3 px-6 sm:px-8 rounded-lg shadow transition w-full sm:w-auto text-sm sm:text-base">
+                        Zarejestruj się
+                    </a>
+                    <a routerLink="/login" class="bg-white border border-blue-600 hover:bg-blue-50 text-blue-600 font-semibold py-2 sm:py-3 px-6 sm:px-8 rounded-lg shadow transition w-full sm:w-auto text-sm sm:text-base">
+                        Zaloguj się
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex-1 flex justify-center lg:justify-end">
+                <img src="assets/landing_page_bike.png" alt="Bicycle in bicycle service" class="w-full max-w-sm object-contain">
+            </div>
+        </div>
+
+        <div class="mt-16 mb-16 max-w-6xl mx-auto text-center">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-blue-600 mb-4">Kluczowe funkcje BikeTrack</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center">
+                    <div class="text-blue-600 text-5xl mb-3">🚴‍♂️</div>
+                    <h3 class="text-xl font-bold mb-2">Zarządzanie rowerami</h3>
+                    <p class="text-gray-600 text-sm text-center">
+                        Dodawaj, edytuj i usuwaj rowery w swojej kolekcji, aby zawsze mieć pełną kontrolę nad swoim sprzętem.
+                    </p>
+                </div>
+
+                <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center">
+                    <div class="text-blue-600 text-5xl mb-3">🛠️</div>
+                    <h3 class="text-xl font-bold mb-2">Śledzenie napraw</h3>
+                    <p class="text-gray-600 text-sm text-center">
+                        Rejestruj wszystkie naprawy, dodawaj szczegóły, przeglądaj historię i kontroluj koszty serwisowania.
+                    </p>
+                </div>
+
+                <div class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center">
+                    <div class="text-blue-600 text-5xl mb-3">📊</div>
+                    <h3 class="text-xl font-bold mb-2">Statystyki i analiza</h3>
+                    <p class="text-gray-600 text-sm text-center">
+                        Monitoruj wydatki, liczbę napraw i stan techniczny swoich rowerów, aby lepiej planować konserwację.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <app-footer></app-footer>
+
+</div>
