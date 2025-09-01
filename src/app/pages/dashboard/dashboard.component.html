@@ -1,1 +1,89 @@
-<p>dashboard works!</p>
+<section class="flex flex-col items-center text-center py-16 px-4">
+
+  <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2">
+    Witaj w BikeTrack!
+  </h1>
+  <p class="text-gray-600 mb-8 max-w-xl">
+    Zarządzaj swoimi rowerami, śledź naprawy i przeglądaj statystyki w jednym miejscu.
+  </p>
+
+  <div *ngIf="errorMessage" class="w-full max-w-4xl mb-6">
+    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex justify-between items-center">
+      <span>{{ errorMessage }}</span>
+      <button (click)="fetchData()" class="ml-4 bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 transition">
+        Spróbuj ponownie
+      </button>
+    </div>
+  </div>
+
+  <h2 class="text-xl font-semibold text-gray-700 mb-4">Podsumowanie konta</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl mb-12">
+
+    <div class="bg-white shadow rounded-xl p-6 text-center">
+      <div *ngIf="loading || errorMessage" class="h-12 bg-gray-200 animate-pulse rounded mb-2 mx-auto w-16"></div>
+      <h3 *ngIf="!loading && !errorMessage" class="text-3xl font-extrabold text-blue-600">
+        {{ stats?.totalBikes }}
+      </h3>
+      <p class="text-gray-600 mt-1">Twoje rowery</p>
+    </div>
+
+    <div class="bg-white shadow rounded-xl p-6 text-center">
+      <div *ngIf="loading || errorMessage" class="h-12 bg-gray-200 animate-pulse rounded mb-2 mx-auto w-16"></div>
+      <h3 *ngIf="!loading && !errorMessage" class="text-3xl font-extrabold text-blue-600">
+        {{ stats?.totalRepairs }}
+      </h3>
+      <p class="text-gray-600 mt-1">Wszystkie naprawy</p>
+    </div>
+
+    <div class="bg-white shadow rounded-xl p-6 text-center">
+      <div *ngIf="loading || errorMessage" class="h-12 bg-gray-200 animate-pulse rounded mb-2 mx-auto w-16"></div>
+      <h3 *ngIf="!loading && !errorMessage" class="text-3xl font-extrabold text-blue-600">
+        {{ stats?.totalRepairsCost?.amount }} {{ stats?.totalRepairsCost?.currency | formatCurrency }}
+      </h3>
+      <p class="text-gray-600 mt-1">Łączny koszt napraw</p>
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-4xl mb-12">
+    <div class="bg-white shadow rounded-xl p-6">
+
+      <h4 class="font-semibold text-lg text-gray-800 mb-2">Ostatnio dodany rower</h4>
+
+      <div *ngIf="loading || errorMessage" class="h-6 w-full bg-gray-200 animate-pulse rounded mb-2"></div>
+
+      <ng-container *ngIf="!loading && !errorMessage">
+        <p *ngIf="stats?.recentlyAddedBike; else noBike" class="text-gray-600">
+          {{ stats?.recentlyAddedBike }}
+        </p>
+
+        <ng-template #noBike>
+          <p class="text-gray-600">Nie dodano jeszcze żadnego roweru.</p>
+          <button routerLink="/bikes" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
+            Dodaj rower
+          </button>
+        </ng-template>
+      </ng-container>
+    </div>
+
+    <div class="bg-white shadow rounded-xl p-6">
+      <h4 class="font-semibold text-lg text-gray-800 mb-2">Ostatnia naprawa</h4>
+
+      <div *ngIf="loading || errorMessage" class="h-6 w-full bg-gray-200 animate-pulse rounded mb-2"></div>
+
+      <ng-container *ngIf="!loading && !errorMessage">
+        <p *ngIf="stats?.recentlyAddedRepair; else noRepair" class="text-gray-600">
+          {{ stats?.recentlyAddedRepair?.title }} - {{ stats?.recentlyAddedRepair?.repairCost?.amount }} {{ stats?.recentlyAddedRepair?.repairCost?.currency | formatCurrency }}
+        </p>
+
+        <ng-template #noRepair>
+          <p class="text-gray-600">Brak zapisanych napraw.</p>
+          <button routerLink="/repairs" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
+            Dodaj naprawę
+          </button>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</section>

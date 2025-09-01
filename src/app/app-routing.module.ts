@@ -10,6 +10,7 @@ import { noAuthGuard } from './shared/guard/no-auth.guard';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { authGuard } from './shared/guard/auth.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent, canActivate: [noAuthGuard] },
@@ -18,7 +19,14 @@ const routes: Routes = [
   { path: 'active-account/:token', component: AccountActivationComponent, canActivate: [noAuthGuard] },
   { path: 'reset-password', component: ForgotPasswordComponent, canActivate: [noAuthGuard] },
   { path: 'reset-password/:token', component: ResetPasswordComponent, canActivate: [noAuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  {
+    path: '',
+    component: UserLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent }
+    ]
+  },
   { path: '**', component: NotFoundComponent },
 ];
 

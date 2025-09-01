@@ -1,0 +1,61 @@
+<div class="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white">
+
+    <header class="bg-white shadow-sm border-b border-gray-200 px-6 py-4 flex justify-between items-center fixed w-full z-50">
+        <div class="text-3xl font-extrabold text-blue-600 tracking-wide">
+            <a routerLink="/">BikeTrack</a>
+        </div>
+
+        <button (click)="logout()" class="hidden sm:block bg-white border border-blue-600 text-blue-600 font-semibold px-5 py-2 rounded-lg hover:bg-blue-50 transition">
+            Wyloguj się
+        </button>
+
+        <button (click)="toggleSidebar()" class="sm:hidden inline-flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-200">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </header>
+
+    <div class="flex flex-1 relative pt-[64px] min-h-0">
+        <aside class="hidden sm:flex flex-col w-64 bg-white border-r border-gray-200 shadow-md h-[calc(100vh-64px)] sticky top-[64px] text-lg">
+
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                <a *ngFor="let item of menuItems"
+                    [routerLink]="item.link"
+                    routerLinkActive="bg-blue-100 !text-blue-700 font-bold"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="block w-full text-left px-5 py-3 rounded-lg hover:bg-gray-50 transition text-gray-700">
+                    {{ item.label }}
+                </a>
+            </nav>
+        </aside>
+
+        <div class="fixed inset-0 z-40 sm:hidden" [class.hidden]="!sidebarOpen">
+
+            <div class="absolute inset-0 backdrop-blur-sm" (click)="closeSidebar()"></div>
+
+            <aside class="absolute top-[64px] left-0 w-64 h-[calc(100%-64px)] bg-white shadow-lg transform transition-transform duration-300" [ngClass]="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
+                <nav class="flex-1 px-4 py-6 space-y-2">
+                    <a *ngFor="let item of menuItems"
+                        [routerLink]="item.link"
+                        routerLinkActive="bg-blue-100 !text-blue-700 font-bold"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        (click)="closeSidebar()"
+                        class="block w-full text-left px-5 py-3 rounded-lg hover:bg-gray-50 transition text-gray-700">
+                        {{ item.label }}
+                    </a>
+                </nav>
+
+                <div class="border-t border-gray-200 p-4">
+                    <button (click)="logout(); closeSidebar()" class="w-full bg-white border border-blue-600 text-blue-600 font-semibold px-5 py-2 rounded-lg hover:bg-blue-50 transition">
+                        Wyloguj się
+                    </button>
+                </div>
+            </aside>
+        </div>
+
+        <main class="flex-1 p-6 overflow-y-auto min-h-0">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

@@ -16,6 +16,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { AuthInterceptor } from './shared/interceptor/auth.interceptor';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { FormatCurrencyPipe } from './shared/pipe/format-currency.pipe';
+import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     ResetPasswordComponent,
     LoginComponent,
     LandingPageComponent,
-    DashboardComponent
+    DashboardComponent,
+    FormatCurrencyPipe,
+    UserLayoutComponent
   ],
   imports: [
     BrowserModule,
