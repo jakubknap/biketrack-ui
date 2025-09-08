@@ -1,4 +1,4 @@
 export interface Money {
     amount: number;
-    currency: string;
+    currency: string | null;
 }

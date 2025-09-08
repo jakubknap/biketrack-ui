@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { DashboardStatsResponse } from 'src/app/pages/dashboard/model/dashboard-stats-model';
-import { BaseService } from './base.service';
+import { BaseService } from 'src/app/shared/services/base.service';
 
 @Injectable({
   providedIn: 'root'

@@ -8,8 +8,8 @@ export class FormatCurrencyPipe implements PipeTransform {
         USD: '$'
     };
 
-    transform(value: string | null | undefined): string {
-        if (!value) return '';
+    transform(value: string | null | undefined): string | null {
+        if (!value) return null;
         return this.symbols[value] || value;
     }
 }

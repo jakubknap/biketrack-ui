@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardStatsResponse } from './model/dashboard-stats-model';
-import { DashboardService } from 'src/app/shared/services/dashboard.service';
+import { Router } from '@angular/router';
+import { DashboardService } from './service/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +13,8 @@ export class DashboardComponent implements OnInit {
   loading: boolean = true;
   errorMessage: string | null = null;
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(private dashboardService: DashboardService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.fetchData();
@@ -33,5 +35,21 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  openBikeDetailsModal(bikeUuid?: string) {
+    this.router.navigate([`/bikes/${bikeUuid}`]);
+  }
+
+  openAddBikeModal() {
+    this.router.navigate(['/bikes'], { queryParams: { modal: 'add' } });
+  }
+
+  openRepairDetailsModal(repairUuid?: string) {
+    this.router.navigate(['/repairs'], { queryParams: { modal: 'details', repairUuid: repairUuid } });
+  }
+
+  openAddRepairModal() {
+    this.router.navigate(['/repairs'], { queryParams: { modal: 'add' } });
   }
 }
