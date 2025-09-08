@@ -1,0 +1,123 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" (click)="close()"></div>
+    <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl p-6 z-50 max-h-[90vh] overflow-y-auto mx-4 sm:mx-auto" #modalContent>
+
+        <button type="button" (click)="close()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+            ✕
+        </button>
+
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+            Dodaj nowy rower
+        </h3>
+        
+        <div *ngIf="errorMessage" class="relative mb-6 p-4 rounded-lg border text-sm font-medium shadow-sm bg-red-50 border-red-200 text-red-800">
+            <span>
+                {{ errorMessage }}
+            </span>
+            <button type="button" (click)="errorMessage = null" class="absolute top-2 right-2 text-lg leading-none cursor-pointer hover:opacity-75">
+                &times;
+            </button>
+        </div>
+        
+        <form [formGroup]="addBikeForm" (ngSubmit)="onSubmit()" novalidate class="space-y-4">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
+                    Nazwa
+                </label>
+                <input id="name" formControlName="name" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <div *ngIf="name.errors && (name.dirty || name.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="name.errors['required']">Nazwa jest wymagana</div>
+                    <div *ngIf="name.errors['pattern']">Nazwa zawiera niedozwolone znaki</div>
+                    <div *ngIf="name.errors['backend']">{{ name.errors['backend'] }}</div>
+                </div>
+            </div>
+
+            <div>
+                <label for="brand" class="block text-sm font-medium text-gray-700 mb-1">
+                    Marka
+                </label>
+                <input id="brand" formControlName="brand" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <div *ngIf="brand.errors && (brand.dirty || brand.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="brand.errors['pattern']">Marka zawiera niedozwolone znaki</div>
+                    <div *ngIf="brand.errors['backend']">{{ brand.errors['backend'] }}</div>
+                </div>
+            </div>
+
+            <div>
+                <label for="model" class="block text-sm font-medium text-gray-700 mb-1">
+                    Model
+                </label>
+                <input id="model" formControlName="model" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <div *ngIf="model.errors && (model.dirty || model.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="model.errors['pattern']">Model zawiera niedozwolone znaki</div>
+                    <div *ngIf="model.errors['backend']">{{ model.errors['backend'] }}</div>
+                </div>
+            </div>
+
+            <div>
+                <label for="type" class="block text-sm font-medium text-gray-700 mb-1">
+                    Typ
+                </label>
+                <input id="type" formControlName="type" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <div *ngIf="type.errors && (type.dirty || type.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="type.errors['required']">Typ jest wymagany</div>
+                    <div *ngIf="type.errors['pattern']">Typ zawiera niedozwolone znaki</div>
+                    <div *ngIf="type.errors['backend']">{{ type.errors['backend'] }}</div>
+                </div>
+            </div>
+
+            <div>
+                <label for="purchaseDate" class="block text-sm font-medium text-gray-700 mb-1">
+                    Data zakupu
+                </label>
+                <input id="purchaseDate" formControlName="purchaseDate" type="date" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+
+            <div>
+                <label for="serialNumber" class="block text-sm font-medium text-gray-700 mb-1">
+                    Numer seryjny
+                </label>
+                <input id="serialNumber" formControlName="serialNumber" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <div *ngIf="serialNumber.errors && (serialNumber.dirty || serialNumber.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="serialNumber.errors['pattern']">Numer seryjny zawiera niedozwolone znaki</div>
+                    <div *ngIf="serialNumber.errors['backend']">{{ serialNumber.errors['backend'] }}</div>
+                </div>
+            </div>
+
+            <div>
+                <label for="mileageKm" class="block text-sm font-medium text-gray-700 mb-1">
+                    Przebieg (km)
+                </label>
+                <input id="mileageKm" formControlName="mileageKm" type="number" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <div *ngIf="mileageKm.errors && (mileageKm.dirty || mileageKm.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="mileageKm.errors['pattern']">Przebieg zawiera niedozwolone znaki</div>
+                    <div *ngIf="mileageKm.errors['backend']">{{ mileageKm.errors['backend'] }}</div>
+                </div>
+            </div>
+
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
+                    Opis
+                </label>
+                <textarea id="description" formControlName="description" class="w-full border rounded-md px-3 py-2 min-h-[65px] resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                <div *ngIf="description.errors && (description.dirty || description.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="description.errors['pattern']">Opis zawiera niedozwolone znaki</div>
+                    <div *ngIf="description.errors['backend']">{{ description.errors['backend'] }}</div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4 mt-4">
+                <button type="button" (click)="close()" class="px-6 py-2 rounded-md border">
+                    Anuluj
+                </button>
+
+                <button type="submit" [disabled]="loading" class="px-6 py-2 flex items-center justify-center bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium">
+                    <app-spinner *ngIf="loading"></app-spinner>
+                    <span>
+                        {{ loading ? 'Przetwarzanie...' : 'Dodaj' }}
+                    </span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
