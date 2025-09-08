@@ -34,7 +34,17 @@ export class TokenService {
   }
 
   isAuthenticated(): boolean {
-    const accessToken = this.getAccessToken();
-    return accessToken != null && !this.jwtHelper.isTokenExpired(accessToken);
+    const access = this.getAccessToken();
+    const refresh = this.getRefreshToken();
+
+    if (access && !this.jwtHelper.isTokenExpired(access)) {
+      return true;
+    }
+
+    if (refresh && !this.jwtHelper.isTokenExpired(refresh)) {
+      return true;
+    }
+
+    return false;
   }
 }
