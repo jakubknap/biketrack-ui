@@ -23,7 +23,6 @@
                 <a *ngFor="let item of menuItems"
                     [routerLink]="item.link"
                     routerLinkActive="bg-blue-100 !text-blue-700 font-bold"
-                    [routerLinkActiveOptions]="{ exact: true }"
                     class="block w-full text-left px-5 py-3 rounded-lg hover:bg-gray-50 transition text-gray-700">
                     {{ item.label }}
                 </a>
@@ -39,7 +38,6 @@
                     <a *ngFor="let item of menuItems"
                         [routerLink]="item.link"
                         routerLinkActive="bg-blue-100 !text-blue-700 font-bold"
-                        [routerLinkActiveOptions]="{ exact: true }"
                         (click)="closeSidebar()"
                         class="block w-full text-left px-5 py-3 rounded-lg hover:bg-gray-50 transition text-gray-700">
                         {{ item.label }}
