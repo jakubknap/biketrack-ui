@@ -18,6 +18,10 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FormatCurrencyPipe } from './shared/pipe/format-currency.pipe';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+import { BikeComponent } from './pages/bike/bike.component';
+import { BikeAddModalComponent } from './pages/bike/modals/bike-add-modal/bike-add-modal.component';
+import { BikeDeleteModalComponent } from './pages/bike/modals/bike-delete-modal/bike-delete-modal.component';
+import { BikeEditModalComponent } from './pages/bike/modals/bike-edit-modal/bike-edit-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +38,11 @@ import { UserLayoutComponent } from './layouts/user-layout/user-layout.component
     LandingPageComponent,
     DashboardComponent,
     FormatCurrencyPipe,
-    UserLayoutComponent
+    UserLayoutComponent,
+    BikeComponent,
+    BikeAddModalComponent,
+    BikeDeleteModalComponent,
+    BikeEditModalComponent
   ],
   imports: [
     BrowserModule,

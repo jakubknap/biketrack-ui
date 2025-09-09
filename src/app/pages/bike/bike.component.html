@@ -1,0 +1,96 @@
+<div class="flex justify-between items-center mb-6 mt-1">
+    <h2 class="text-3xl font-bold text-gray-800">Twoje rowery</h2>
+    <button *ngIf="!loading && !errorMessage" (click)="openAddModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+        <span class="text-xl font-bold">+</span> Dodaj rower
+    </button>
+</div>
+
+<div *ngIf="!loading && errorMessage" class="flex justify-center py-12">
+    <div class="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md shadow-md">
+        
+        <svg class="mx-auto mb-4 w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12c0 4.9706-4.0294 9-9 9s-9-4.0294-9-9 4.0294-9 9-9 9 4.0294 9 9z" />
+        </svg>
+
+        <p class="text-red-700 text-lg mb-4">{{ errorMessage }}</p>
+
+        <button (click)="fetchData()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition font-semibold">
+            Spróbuj ponownie
+        </button>
+    </div>
+</div>
+
+<div *ngIf="loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+    <div *ngFor="let _ of [].constructor(pageSize); let i = index" class="animate-pulse bg-white rounded-xl shadow p-3 min-h-[250px] flex flex-col">
+        <div class="bg-gray-200 h-40 w-full rounded-md mb-3"></div>
+        <div class="bg-gray-200 h-6 w-3/4 rounded mb-2"></div>
+        <div class="bg-gray-200 h-4 w-1/2 rounded mb-2"></div>
+        <div class="flex gap-2 mt-auto">
+            <div class="bg-gray-200 h-8 flex-1 rounded"></div>
+            <div class="bg-gray-200 h-8 flex-1 rounded"></div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!loading && !errorMessage && bikeList.length === 0" class="flex flex-col items-center justify-center py-20 space-y-6">
+
+    <h3 class="text-2xl font-bold text-gray-700 text-center">
+        Twoja kolekcja rowerów jest pusta!
+    </h3>
+
+    <p class="text-gray-500 text-center max-w-xs">
+        Dodaj pierwszy rower, aby zacząć śledzić naprawy i statystyki.
+    </p>
+
+    <button (click)="openAddModal()" class="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition font-semibold shadow-lg">
+        <span class="text-xl font-bold">+</span> Dodaj pierwszy rower
+    </button>
+</div>
+
+<div *ngIf="!loading && !errorMessage && bikeList.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+    <div *ngFor="let bike of bikeList" class="bg-white rounded-xl shadow p-3 flex flex-col min-h-[250px]">
+
+        <div class="w-full h-[250px] rounded-md mb-2 bg-gray-100 flex justify-center items-center overflow-hidden">
+            <img src="assets/images/placeholder.png" alt="Zdjęcie roweru" class="max-w-full max-h-full object-contain">
+        </div>
+
+        <h3 class="font-bold text-lg text-blue-600">{{ bike.name }}</h3>
+
+        <div class="mt-3 flex flex-wrap gap-2 text-sm">
+            <button class="flex-1 bg-gray-100 text-gray-800 font-semibold px-3 py-2 rounded-lg shadow-sm hover:bg-gray-200 transition">
+                Szczegóły
+            </button>
+
+            <button (click)="openEditModal(bike.uuid)" class="flex-1 bg-blue-100 text-blue-700 font-semibold px-3 py-2 rounded-lg shadow-sm hover:bg-blue-200 transition">
+                Edytuj
+            </button>
+
+            <button (click)="openDeleteModal(bike.uuid, bike.name)" class="flex-1 bg-red-100 text-red-700 font-semibold px-3 py-2 rounded-lg shadow-sm hover:bg-red-200 transition">
+                Usuń
+            </button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!loading && !errorMessage && bikeList.length > 0" class="flex items-center gap-8 justify-center mt-6">
+
+    <button (click)="goToPreviousPage()" [disabled]="isFirstPage" class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+        </svg>
+    </button>
+
+    <p class="text-slate-600"> Strona <strong class="text-slate-800">
+        {{ currentPage + 1 }}</strong> z&nbsp;<strong class="text-slate-800">{{ totalPages }}</strong>
+    </p>
+
+    <button (click)="goToNextPage()" [disabled]="isLastPage" class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path fill-rule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+        </svg>
+    </button>
+</div>
+
+<app-bike-add-modal *ngIf="showAddModal" (closed)="handleModalClosed($event)"></app-bike-add-modal>
+<app-bike-edit-modal *ngIf="showEditModal" [bikeUuid]="selectedBike?.uuid!" (closed)="handleModalClosed($event)"></app-bike-edit-modal>
+<app-bike-delete-modal *ngIf="showDeleteModal" [bikeDto]="selectedBike!" (closed)="handleModalClosed($event)"></app-bike-delete-modal>

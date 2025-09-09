@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BikeService } from 'src/app/pages/bike/service/bike.service';
-import { BikeDeleteDto } from '../../model/bike.model';
+import { BikeDto } from '../../model/bike.model';
 import { ModalCloseStatus } from 'src/app/shared/enums/event-emitter.enum';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 
@@ -10,7 +10,7 @@ import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 })
 export class BikeDeleteModalComponent {
 
-  @Input() bikeDto!: BikeDeleteDto;
+  @Input() bikeDto!: BikeDto;
 
   @Output() closed = new EventEmitter<{ status: ModalCloseStatus, message?: string }>();
 

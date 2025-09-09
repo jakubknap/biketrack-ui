@@ -11,6 +11,7 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { authGuard } from './shared/guard/auth.guard';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
+import { BikeComponent } from './pages/bike/bike.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent, canActivate: [noAuthGuard] },
@@ -24,7 +25,8 @@ const routes: Routes = [
     component: UserLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent }
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'bikes', component: BikeComponent }
     ]
   },
   { path: '**', component: NotFoundComponent },
