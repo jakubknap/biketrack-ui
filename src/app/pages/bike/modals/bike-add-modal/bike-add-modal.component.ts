@@ -4,6 +4,7 @@ import { BikeService } from 'src/app/pages/bike/service/bike.service';
 import { ModalCloseStatus } from 'src/app/shared/enums/event-emitter.enum';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 import { safeTextValidator } from 'src/app/shared/validators/form-validators';
+import { AddBikeRequest } from '../../model/bike.model';
 
 @Component({
   selector: 'app-bike-add-modal',
@@ -103,9 +104,17 @@ export class BikeAddModalComponent implements OnInit {
     this.closed.emit({ status: ModalCloseStatus.DISMISSED });
   }
 
-  private prepareRequest(): any {
+  private prepareRequest(): FormData {
     const formData = new FormData();
-    formData.append('bikeData', new Blob([JSON.stringify({
+    const addBikeRequest: AddBikeRequest = this.prepareAddBikeRequest();
+
+    formData.append('bikeData', new Blob([JSON.stringify(addBikeRequest)], { type: 'application/json' }));
+
+    return formData;
+  }
+
+  private prepareAddBikeRequest(): AddBikeRequest {
+    return {
       name: this.addBikeForm.value.name,
       brand: this.addBikeForm.value.brand,
       model: this.addBikeForm.value.model,
@@ -114,9 +123,7 @@ export class BikeAddModalComponent implements OnInit {
       serialNumber: this.addBikeForm.value.serialNumber,
       mileageKm: this.addBikeForm.value.mileageKm,
       description: this.addBikeForm.value.description
-    })], { type: 'application/json' }));
-
-    return formData;
+    };
   }
 
   private mapErrorValidationMessages(error: ApiErrorResponse) {

@@ -19,3 +19,5 @@ export const passwordValidators = [
   Validators.maxLength(100),
   Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#^()$!%*?&.\-_])[A-Za-z\d@$!#^()%*?&.\-_]{8,}$/)
 ];
+
+export const safeTextValidator = Validators.pattern(/^[\p{L}\p{N} .,!?:;'"()@&%\-_]+$/u);
