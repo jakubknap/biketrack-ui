@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BikeService } from 'src/app/pages/bike/service/bike.service';
 import { BikeDto, BikeList } from './model/bike.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalCloseStatus } from 'src/app/shared/enums/event-emitter.enum';
+import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
 
 @Component({
   selector: 'app-bike',

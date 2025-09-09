@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BikeService } from 'src/app/pages/bike/service/bike.service';
 import { BikeDto } from '../../model/bike.model';
-import { ModalCloseStatus } from 'src/app/shared/enums/event-emitter.enum';
+import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BikeService } from 'src/app/pages/bike/service/bike.service';
-import { ModalCloseStatus } from 'src/app/shared/enums/event-emitter.enum';
+import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 import { safeTextValidator } from 'src/app/shared/validators/form-validators';
 import { BikeDetails, EditBikeRequest } from '../../model/bike.model';
