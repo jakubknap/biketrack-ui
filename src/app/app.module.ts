@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +22,15 @@ import { BikeComponent } from './pages/bike/bike.component';
 import { BikeAddModalComponent } from './pages/bike/modals/bike-add-modal/bike-add-modal.component';
 import { BikeDeleteModalComponent } from './pages/bike/modals/bike-delete-modal/bike-delete-modal.component';
 import { BikeEditModalComponent } from './pages/bike/modals/bike-edit-modal/bike-edit-modal.component';
+import { RepairComponent } from './pages/repair/repair.component';
+import { registerLocaleData } from '@angular/common';
+import localePl from '@angular/common/locales/pl';
+import { RepairAddModalComponent } from './pages/repair/modals/repair-add-modal/repair-add-modal.component';
+import { RepairEditModalComponent } from './pages/repair/modals/repair-edit-modal/repair-edit-modal.component';
+import { RepairDeleteModalComponent } from './pages/repair/modals/repair-delete-modal/repair-delete-modal.component';
+import { RepairDetailsModalComponent } from './pages/repair/modals/repair-details-modal/repair-details-modal.component';
+
+registerLocaleData(localePl);
 
 @NgModule({
   declarations: [
@@ -42,7 +51,12 @@ import { BikeEditModalComponent } from './pages/bike/modals/bike-edit-modal/bike
     BikeComponent,
     BikeAddModalComponent,
     BikeDeleteModalComponent,
-    BikeEditModalComponent
+    BikeEditModalComponent,
+    RepairComponent,
+    RepairAddModalComponent,
+    RepairEditModalComponent,
+    RepairDeleteModalComponent,
+    RepairDetailsModalComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +65,8 @@ import { BikeEditModalComponent } from './pages/bike/modals/bike-edit-modal/bike
     HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'pl' }
   ],
   bootstrap: [AppComponent]
 })

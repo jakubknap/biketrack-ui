@@ -1,0 +1,165 @@
+<div class="flex justify-between items-center mb-6 mt-1">
+  <h2 class="text-3xl font-bold text-gray-800">Twoje naprawy</h2>
+  <button *ngIf="!loading && !errorMessage" (click)="openAddModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+    <span class="text-xl font-bold">+</span> Dodaj naprawę
+  </button>
+</div>
+
+<div *ngIf="!loading && errorMessage" class="flex justify-center py-12">
+  <div class="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md shadow-md">
+
+    <svg class="mx-auto mb-4 w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12c0 4.9706-4.0294 9-9 9s-9-4.0294-9-9 4.0294-9 9-9 9 4.0294 9 9z"/>
+    </svg>
+
+    <p class="text-red-700 text-lg mb-4">{{ errorMessage }}</p>
+
+    <button (click)="fetchData()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition font-semibold">
+      Spróbuj ponownie
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!loading && !errorMessage && repairs.length === 0" class="flex flex-col items-center justify-center py-20 space-y-6">
+
+  <h3 class="text-2xl font-bold text-gray-700 text-center">
+    Twoja lista napraw jest pusta!
+  </h3>
+
+  <p class="text-gray-500 text-center max-w-xs">
+    Dodaj pierwszą naprawę, aby zacząć prowadzić dziennik i podglądać statystyki.
+  </p>
+
+  <button (click)="openAddModal()" class="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition font-semibold shadow-lg">
+    <span class="text-xl font-bold">+</span> Dodaj pierwszą naprawę
+  </button>
+</div>
+
+<div *ngIf="(!loading && !errorMessage && repairs.length > 0) || (loading && !errorMessage)" class="overflow-x-auto bg-white rounded-xl shadow">
+  <table class="min-w-full divide-y divide-gray-200">
+
+    <thead class="bg-gray-50">
+    <tr>
+      <th (click)="!loading && sortData('bike.name')" [ngClass]="{ 'cursor-pointer': !loading, 'cursor-default text-gray-400': loading }"
+          class="px-6 py-3 text-left text-sm font-semibold">
+        Rower
+        <span *ngIf="sortColumn === 'bike.name' && !loading">
+            {{ sortDirection === 'asc' ? '▲' : '▼' }}
+          </span>
+      </th>
+
+      <th (click)="!loading && sortData('title')" [ngClass]="{ 'cursor-pointer': !loading, 'cursor-default text-gray-400': loading }"
+          class="px-6 py-3 text-left text-sm font-semibold">
+        Naprawa
+        <span *ngIf="sortColumn === 'title' && !loading">
+            {{ sortDirection === 'asc' ? '▲' : '▼' }}
+          </span>
+      </th>
+
+      <th (click)="!loading && sortData('createdDate')" [ngClass]="{ 'cursor-pointer': !loading, 'cursor-default text-gray-400': loading }"
+          class="px-6 py-3 text-left text-sm font-semibold">
+        Data utworzenia
+        <span *ngIf="sortColumn === 'createdDate' && !loading">
+            {{ sortDirection === 'asc' ? '▲' : '▼' }}
+          </span>
+      </th>
+
+      <th (click)="!loading && sortData('cost')" [ngClass]="{ 'cursor-pointer': !loading, 'cursor-default text-gray-400': loading }"
+          class="px-6 py-3 text-left text-sm font-semibold">
+        Koszt
+        <span *ngIf="sortColumn === 'cost' && !loading">
+            {{ sortDirection === 'asc' ? '▲' : '▼' }}
+          </span>
+      </th>
+
+      <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Akcje</th>
+    </tr>
+    </thead>
+
+    <tbody *ngIf="loading && !errorMessage">
+    <tr *ngFor="let _ of [1,2,3,4]">
+      <td class="px-6 py-4">
+        <div class="h-4 w-24 bg-gray-200 animate-pulse rounded"></div>
+      </td>
+      <td class="px-6 py-4">
+        <div class="h-4 w-32 bg-gray-200 animate-pulse rounded"></div>
+      </td>
+      <td class="px-6 py-4">
+        <div class="h-4 w-20 bg-gray-200 animate-pulse rounded"></div>
+      </td>
+      <td class="px-6 py-4">
+        <div class="h-4 w-16 bg-gray-200 animate-pulse rounded"></div>
+      </td>
+      <td class="px-6 py-4 text-center">
+        <div class="h-8 w-24 bg-gray-200 animate-pulse rounded mx-auto"></div>
+      </td>
+    </tr>
+    </tbody>
+
+    <tbody class="divide-y divide-gray-200" *ngIf="!loading && !errorMessage && repairs.length > 0">
+    <tr *ngFor="let repair of repairs">
+
+      <td class="px-6 py-4">
+        <p class="font-medium text-gray-800">{{ repair.bike.name }}</p>
+      </td>
+
+      <td class="px-6 py-4">
+        <p class="font-medium text-gray-800">{{ repair.title }}</p>
+      </td>
+
+      <td class="px-6 py-4 text-gray-600">
+        {{ repair.createdDate | date:'mediumDate' }}
+      </td>
+
+      <td class="px-6 py-4 text-gray-800 font-semibold">
+        {{ repair.cost.amount | number:'1.2-2' }} {{ (repair.cost.currency | formatCurrency) || 'zł' }}
+      </td>
+
+      <td class="px-6 py-4">
+        <div class="flex gap-2 justify-center">
+          <button (click)="openDetailsModal(repair.uuid)" class="px-3 py-1.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition">
+            Szczegóły
+          </button>
+
+          <button (click)="openEditModal(repair.uuid)" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition">
+            Edytuj
+          </button>
+
+          <button (click)="openDeleteModal(repair.uuid, repair.title)" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition">
+            Usuń
+          </button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="!loading && !errorMessage && repairs.length > 0" class="flex items-center gap-8 justify-center mt-6">
+
+  <button (click)="goToPreviousPage()" [disabled]="isFirstPage"
+          class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+      <path fill-rule="evenodd"
+            d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z"
+            clip-rule="evenodd"/>
+    </svg>
+  </button>
+
+  <p class="text-slate-600">
+    Strona <strong class="text-slate-800"> {{ currentPage + 1 }}</strong> z&nbsp;<strong class="text-slate-800">{{ totalPages }}</strong>
+  </p>
+
+  <button (click)="goToNextPage()" [disabled]="isLastPage"
+          class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+      <path fill-rule="evenodd"
+            d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z"
+            clip-rule="evenodd"/>
+    </svg>
+  </button>
+</div>
+
+<app-repair-add-modal *ngIf="showAddModal" (closed)="handleModalClosed($event)"></app-repair-add-modal>
+<app-repair-edit-modal *ngIf="showEditModal" [repairUuid]="selectedRepair?.uuid!" (closed)="handleModalClosed($event)"></app-repair-edit-modal>
+<app-repair-delete-modal *ngIf="showDeleteModal" [repairDto]="selectedRepair!" (closed)="handleModalClosed($event)"></app-repair-delete-modal>
