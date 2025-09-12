@@ -5,6 +5,8 @@ import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 import { safeTextValidator } from 'src/app/shared/validators/form-validators';
 import { ReapirService } from '../../service/reapir.service';
 import { AddRepairRequest } from '../../model/repair.model';
+import { BikeService } from 'src/app/pages/bike/service/bike.service';
+import { BikeListToSelect } from 'src/app/pages/bike/model/bike.model';
 
 @Component({
   selector: 'app-repair-add-modal',
@@ -17,21 +19,32 @@ export class RepairAddModalComponent implements OnInit {
   @Output() closed = new EventEmitter<{ status: ModalCloseStatus, message?: string }>();
 
   addRepairForm!: FormGroup;
+  bikes: BikeListToSelect[] = [];
 
   loading = false;
   errorMessage: string | null = null;
 
   constructor(private formBuilder: FormBuilder,
-              private repairService: ReapirService) { }
+              private repairService: ReapirService,
+              private bikeService: BikeService) { }
 
   ngOnInit() {
     this.addRepairForm = this.formBuilder.group({
+      bikeUuid: [null, Validators.required],
       title: [null, [safeTextValidator, Validators.required]],
       description: [null, safeTextValidator],
-      cost: [null],
-      currency: [null],
+      cost: [null, [Validators.min(0), Validators.pattern(/^-?\d+(\.\d{1,2})?$/)]],
+      currency: ['PLN'],
       repairDate: [null]
     });
+
+    this.bikeService.getBikesToSelectList().subscribe((response) => {
+      this.bikes = response;
+    });
+  }
+
+  get bikeUuid() {
+    return this.addRepairForm.get('bikeUuid')!;
   }
 
   get title() {
@@ -55,18 +68,18 @@ export class RepairAddModalComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errorMessage = null;
-
     if (this.addRepairForm.invalid) {
       this.addRepairForm.markAllAsTouched();
       this.scrollToTop();
       return;
     }
 
+    this.errorMessage = null;
     this.loading = true;
 
     this.repairService.addRepair(this.prepareRequest()).subscribe({
       next: () => {
+        this.loading = false;
         this.closed.emit({ status: ModalCloseStatus.SUCCESS })
       },
       error: (error: ApiErrorResponse) => {
@@ -100,11 +113,11 @@ export class RepairAddModalComponent implements OnInit {
 
   private prepareAddRepairRequest(): AddRepairRequest {
     return {
-      bikeUuid: '',
+      bikeUuid: this.addRepairForm.value.bikeUuid,
       title: this.addRepairForm.value.title,
       description: this.addRepairForm.value.description,
       cost: this.addRepairForm.value.cost,
-      currency: this.addRepairForm.value.currency,
+      currency: this.addRepairForm.value.cost ? this.addRepairForm.value.currency : null,
       repairDate: this.addRepairForm.value.repairDate
     };
   }

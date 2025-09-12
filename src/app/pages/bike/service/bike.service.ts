@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { BaseService } from '../../../shared/services/base.service';
 import { Page } from '../../../shared/models/page';
-import { BikeDetails, BikeList } from 'src/app/pages/bike/model/bike.model';
+import { BikeDetails, BikeList, BikeListToSelect } from 'src/app/pages/bike/model/bike.model';
 import { BaseResponse } from '../../../shared/models/api-response';
 
 @Injectable({
@@ -25,6 +25,12 @@ export class BikeService extends BaseService {
 
   getBikeList(page: number, size: number): Observable<Page<BikeList>> {
     return this.http.get<Page<BikeList>>(`${this.baseUrl}/${this.bikesPrefix}?page=${page}&size=${size}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getBikesToSelectList(): Observable<BikeListToSelect[]> {
+    return this.http.get<BikeListToSelect[]>(`${this.baseUrl}/${this.bikesPrefix}/select-list`).pipe(
       catchError(this.handleError)
     );
   }

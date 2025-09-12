@@ -42,3 +42,8 @@ export interface EditBikeRequest {
   mileageKm: number;
   description: string;
 }
+
+export interface BikeListToSelect {
+  uuid: string;
+  name: string;
+}

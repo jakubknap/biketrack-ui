@@ -23,7 +23,8 @@ export class RepairEditModalComponent implements OnInit {
   editRepairForm!: FormGroup;
 
   loading = false;
-  errorMessage: string | null = null;
+  loadingErrorMessage: string | null = null;
+  savingErrorMessage: string | null = null;
 
   constructor(private formBuilder: FormBuilder,
               private repairService: ReapirService) { }
@@ -32,36 +33,39 @@ export class RepairEditModalComponent implements OnInit {
     this.fetchRepairData();
   }
 
-  private fetchRepairData(): void {
-    this.errorMessage = null;
+  fetchRepairData(): void {
     this.loading = true;
+    this.loadingErrorMessage = null;
+    this.savingErrorMessage = null;
 
     this.repairService.getRepairDetails(this.repairUuid).subscribe({
       next: (response) => {
         this.repairDetails = response;
 
         this.editRepairForm = this.formBuilder.group({
+          bikeName: [{ value: this.repairDetails.bike.name, disabled: true }],
           title: [this.repairDetails.title, [safeTextValidator, Validators.required]],
           description: [this.repairDetails.description, safeTextValidator],
-          cost: [this.repairDetails.cost.amount],
-          currency: [this.repairDetails.cost.currency],
-          repairDate: [this.repairDetails.repairDate],
-          createdDate: [this.repairDetails.createdDate],
-          lastModifiedDate: [this.repairDetails.lastModifiedDate]
+          cost: [this.repairDetails.cost.amount, [Validators.min(0), Validators.pattern(/^-?\d+(\.\d{1,2})?$/)]],
+          currency: [this.repairDetails.cost.currency ? this.repairDetails.cost.currency : 'PLN'],
+          repairDate: [this.repairDetails.repairDate]
         });
 
         this.loading = false;
-
       },
       error: (error: ApiErrorResponse) => {
         let status = error.status;
 
+        this.loadingErrorMessage = this.mapErrorMessage(status);
         this.loading = false;
-        this.errorMessage = this.mapErrorMessage(status);
 
         this.scrollToTop();
       }
     });
+  }
+
+  get bikeName() {
+    return this.editRepairForm.get('bikeName')!;
   }
 
   get title() {
@@ -85,30 +89,30 @@ export class RepairEditModalComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errorMessage = null;
-
     if (this.editRepairForm.invalid) {
       this.editRepairForm.markAllAsTouched();
       this.scrollToTop();
       return;
     }
 
+    this.savingErrorMessage = null;
     this.loading = true;
 
     this.repairService.updateRepair(this.prepareRequest()).subscribe({
       next: () => {
+        this.loading = false;
         this.closed.emit({ status: ModalCloseStatus.SUCCESS })
       },
       error: (error: ApiErrorResponse) => {
         let status = error.status;
 
+        this.loading = false;
+
         if (error.errors && error.errors.length > 0) {
           this.mapErrorValidationMessages(error);
         } else {
-          this.errorMessage = this.mapErrorMessage(status);
+          this.savingErrorMessage = this.mapErrorMessage(status);
         }
-
-        this.loading = false;
 
         this.scrollToTop();
       }
@@ -134,7 +138,7 @@ export class RepairEditModalComponent implements OnInit {
       title: this.editRepairForm.value.title,
       description: this.editRepairForm.value.description,
       cost: this.editRepairForm.value.cost,
-      currency: this.editRepairForm.value.currency,
+      currency: this.editRepairForm.value.cost ? this.editRepairForm.value.currency : null,
       repairDate: this.editRepairForm.value.repairDate
     };
   }

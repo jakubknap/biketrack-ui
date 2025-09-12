@@ -9,7 +9,7 @@
         <h3 class="text-xl font-semibold text-gray-800 mb-4">
             Dodaj nową naprawę
         </h3>
-        
+
         <div *ngIf="errorMessage" class="relative mb-6 p-4 rounded-lg border text-sm font-medium shadow-sm bg-red-50 border-red-200 text-red-800">
             <span>
                 {{ errorMessage }}
@@ -18,8 +18,23 @@
                 &times;
             </button>
         </div>
-        
+
         <form [formGroup]="addRepairForm" (ngSubmit)="onSubmit()" novalidate class="space-y-4">
+            <div>
+                <label for="bikeUuid" class="block text-sm font-medium text-gray-700 mb-1">
+                    Rower
+                </label>
+                <select id="bikeUuid" formControlName="bikeUuid" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option *ngFor="let bike of bikes" [value]="bike.uuid">
+                        {{ bike.name }}
+                    </option>
+                </select>
+                <div *ngIf="bikeUuid.errors && (bikeUuid.dirty || bikeUuid.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                    <div *ngIf="bikeUuid.errors['required']">Rower jest wymagany</div>
+                    <div *ngIf="bikeUuid.errors['backend']">{{ bikeUuid.errors['backend'] }}</div>
+                </div>
+            </div>
+
             <div>
                 <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
                     Tytuł
@@ -44,22 +59,30 @@
             </div>
 
             <div>
-                <label for="cost" class="block text-sm font-medium text-gray-700 mb-1">
-                    Koszt
-                </label>
-                <input id="cost" formControlName="cost" type="number" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                <div *ngIf="cost.errors && (cost.dirty || cost.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
-                    <div *ngIf="cost.errors['backend']">{{ cost.errors['backend'] }}</div>
-                </div>
-            </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="col-span-2">
+                        <label for="cost" class="block text-sm font-medium text-gray-700 mb-1">
+                            Koszt
+                        </label>
+                        <input id="cost" formControlName="cost" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                        <div *ngIf="cost.errors && (cost.dirty || cost.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                            <div *ngIf="cost.errors['pattern']">Podaj poprawną liczbę</div>
+                            <div *ngIf="cost.errors['min']">Koszt nie może być ujemny</div>
+                            <div *ngIf="cost.errors['backend']">{{ cost.errors['backend'] }}</div>
+                        </div>
+                    </div>
 
-            <div>
-                <label for="currency" class="block text-sm font-medium text-gray-700 mb-1">
-                    Waluta
-                </label>
-                <input id="currency" formControlName="currency" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                <div *ngIf="currency.errors && (currency.dirty || currency.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
-                    <div *ngIf="currency.errors['backend']">{{ currency.errors['backend'] }}</div>
+                    <div>
+                        <label for="currency" class="block text-sm font-medium text-gray-700 mb-1">
+                            Waluta
+                        </label>
+                        <select id="currency" formControlName="currency" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="PLN">PLN</option>
+                        </select>
+                        <div *ngIf="currency.errors && (currency.dirty || currency.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
+                            <div *ngIf="currency.errors['backend']">{{ currency.errors['backend'] }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
