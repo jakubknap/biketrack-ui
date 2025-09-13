@@ -5,7 +5,7 @@ export interface RepairList {
   uuid: string;
   title: string;
   createdDate: Date;
-  cost: Money;
+  cost?: Money;
   bike: RepairBikeDto;
 }
 
@@ -41,9 +41,10 @@ export interface RepairDetails {
   repairUuid: string;
   bike: BikeListToSelect;
   title: string;
-  description: string;
-  cost: Money;
-  repairDate: Date;
+  description?: string;
+  cost?: Money;
+  repairDate?: Date;
   createdDate: Date;
-  lastModifiedDate: Date;
+  lastModifiedDate?: Date;
+  photos?: string[];
 }

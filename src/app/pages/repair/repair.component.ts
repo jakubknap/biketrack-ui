@@ -25,9 +25,9 @@ export class RepairComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'desc';
 
   showAddModal: boolean = false;
+  showDetailsModal: boolean = false;
   showEditModal: boolean = false;
   showDeleteModal: boolean = false;
-  showDetailsModal: boolean = false;
 
   selectedRepair: RepairDto | null = null;
 
@@ -76,6 +76,13 @@ export class RepairComponent implements OnInit {
     this.cleanQueryParams();
   }
 
+  openDetailsModal(repairUuid: string) {
+    this.selectedRepair = { uuid: repairUuid } as RepairDto;
+    this.showDetailsModal = true;
+    this.blockScroll();
+    this.cleanQueryParams();
+  }
+
   openEditModal(repairUuid: string) {
     this.selectedRepair = { uuid: repairUuid } as RepairDto;
     this.showEditModal = true;
@@ -90,15 +97,9 @@ export class RepairComponent implements OnInit {
     this.cleanQueryParams();
   }
 
-  openDetailsModal(repairUuid: string) {
-    this.selectedRepair = { uuid: repairUuid } as RepairDto;
-    this.showDetailsModal = true;
-    this.blockScroll();
-    this.cleanQueryParams();
-  }
-
   handleModalClosed(event: { status: ModalCloseStatus }) {
     this.showAddModal = false;
+    this.showDetailsModal = false;
     this.showEditModal = false;
     this.showDeleteModal = false;
     this.selectedRepair = null;
@@ -144,10 +145,12 @@ export class RepairComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       const modal = params['modal'];
       const repairUuid = params['repairUuid'];
+      const repairName = params['repairName'];
 
       if (modal === 'add') this.openAddModal();
-      if (modal === 'edit' && repairUuid) this.openEditModal(repairUuid);
       if (modal === 'details' && repairUuid) this.openDetailsModal(repairUuid);
+      if (modal === 'edit' && repairUuid) this.openEditModal(repairUuid);
+      if (modal === 'delete' && repairUuid) this.openDeleteModal(repairUuid, repairName);
     });
   }
 }

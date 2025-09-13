@@ -2,10 +2,10 @@ import { Money } from "src/app/shared/models/money";
 
 export interface DashboardStatsResponse {
   totalBikes: number;
-  recentlyAddedBike: RecentlyAddedBikeDto | null;
+  recentlyAddedBike?: RecentlyAddedBikeDto;
   totalRepairs: number;
   totalRepairsCost: Money;
-  recentlyAddedRepair: RecentlyAddedRepairDto | null;
+  recentlyAddedRepair?: RecentlyAddedRepairDto;
 }
 
 export interface RecentlyAddedBikeDto {
@@ -16,5 +16,5 @@ export interface RecentlyAddedBikeDto {
 export interface RecentlyAddedRepairDto {
   uuid: string
   title: string;
-  repairCost: Money;
+  repairCost?: Money;
 }

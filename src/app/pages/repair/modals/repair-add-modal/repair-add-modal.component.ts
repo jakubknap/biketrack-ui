@@ -7,6 +7,7 @@ import { ReapirService } from '../../service/reapir.service';
 import { AddRepairRequest } from '../../model/repair.model';
 import { BikeService } from 'src/app/pages/bike/service/bike.service';
 import { BikeListToSelect } from 'src/app/pages/bike/model/bike.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-repair-add-modal',
@@ -22,25 +23,26 @@ export class RepairAddModalComponent implements OnInit {
   bikes: BikeListToSelect[] = [];
 
   loading = false;
-  errorMessage: string | null = null;
+  loadingBikes = false;
+  loadingErrorMessage: string | null = null;
+  savingErrorMessage: string | null = null;
 
   constructor(private formBuilder: FormBuilder,
               private repairService: ReapirService,
-              private bikeService: BikeService) { }
+              private bikeService: BikeService,
+              private router: Router) { }
 
   ngOnInit() {
     this.addRepairForm = this.formBuilder.group({
       bikeUuid: [null, Validators.required],
       title: [null, [safeTextValidator, Validators.required]],
       description: [null, safeTextValidator],
-      cost: [null, [Validators.min(0), Validators.pattern(/^-?\d+(\.\d{1,2})?$/)]],
+      cost: [null, [Validators.min(0), Validators.pattern(/^-?\d+(\,\d{1,2})?$/)]],
       currency: ['PLN'],
       repairDate: [null]
     });
 
-    this.bikeService.getBikesToSelectList().subscribe((response) => {
-      this.bikes = response;
-    });
+    this.fetchBikes();
   }
 
   get bikeUuid() {
@@ -67,6 +69,28 @@ export class RepairAddModalComponent implements OnInit {
     return this.addRepairForm.get('repairDate')!;
   }
 
+  fetchBikes() {
+    this.loadingBikes = true;
+    this.loadingErrorMessage = null;
+
+    this.bikeService.getBikesToSelectList().subscribe({
+      next: (response) => {
+        this.bikes = response;
+        this.loadingBikes = false;
+      },
+      error: (error: ApiErrorResponse) => {
+        let status = error.status;
+
+        this.loadingErrorMessage = this.mapErrorMessage(status);
+        this.loadingBikes = false;
+      }
+    });
+  }
+
+  openAddBikeModal() {
+    this.router.navigate(['/bikes'], { queryParams: { modal: 'add' } });
+  }
+
   onSubmit() {
     if (this.addRepairForm.invalid) {
       this.addRepairForm.markAllAsTouched();
@@ -74,7 +98,7 @@ export class RepairAddModalComponent implements OnInit {
       return;
     }
 
-    this.errorMessage = null;
+    this.savingErrorMessage = null;
     this.loading = true;
 
     this.repairService.addRepair(this.prepareRequest()).subscribe({
@@ -90,7 +114,7 @@ export class RepairAddModalComponent implements OnInit {
         if (error.errors && error.errors.length > 0) {
           this.mapErrorValidationMessages(error);
         } else {
-          this.errorMessage = this.mapErrorMessage(status);
+          this.savingErrorMessage = this.mapErrorMessage(status);
         }
 
         this.scrollToTop();
@@ -116,8 +140,8 @@ export class RepairAddModalComponent implements OnInit {
       bikeUuid: this.addRepairForm.value.bikeUuid,
       title: this.addRepairForm.value.title,
       description: this.addRepairForm.value.description,
-      cost: this.addRepairForm.value.cost,
-      currency: this.addRepairForm.value.cost ? this.addRepairForm.value.currency : null,
+      cost: this.addRepairForm.value.cost ? this.addRepairForm.value.cost.toString().replace(',', '.') : null,
+      currency: this.addRepairForm.value.cost != null ? this.addRepairForm.value.currency : null,
       repairDate: this.addRepairForm.value.repairDate
     };
   }

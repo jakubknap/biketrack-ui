@@ -46,8 +46,8 @@ export class RepairEditModalComponent implements OnInit {
           bikeName: [{ value: this.repairDetails.bike.name, disabled: true }],
           title: [this.repairDetails.title, [safeTextValidator, Validators.required]],
           description: [this.repairDetails.description, safeTextValidator],
-          cost: [this.repairDetails.cost.amount, [Validators.min(0), Validators.pattern(/^-?\d+(\.\d{1,2})?$/)]],
-          currency: [this.repairDetails.cost.currency ? this.repairDetails.cost.currency : 'PLN'],
+          cost: [this.repairDetails?.cost?.amount ? this.repairDetails?.cost?.amount.toString().replace('.', ',') : null, [Validators.min(0), Validators.pattern(/^-?\d+(\,\d{1,2})?$/)]],
+          currency: [this.repairDetails?.cost?.currency ? this.repairDetails.cost.currency : 'PLN'],
           repairDate: [this.repairDetails.repairDate]
         });
 
@@ -137,8 +137,8 @@ export class RepairEditModalComponent implements OnInit {
       repairUuid: this.repairUuid,
       title: this.editRepairForm.value.title,
       description: this.editRepairForm.value.description,
-      cost: this.editRepairForm.value.cost,
-      currency: this.editRepairForm.value.cost ? this.editRepairForm.value.currency : null,
+      cost: this.editRepairForm.value.cost ? this.editRepairForm.value.cost.toString().replace(',', '.') : null,
+      currency: this.editRepairForm.value.cost != null ? this.editRepairForm.value.currency : null,
       repairDate: this.editRepairForm.value.repairDate
     };
   }
