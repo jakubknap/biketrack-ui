@@ -24,7 +24,7 @@
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
                     Nazwa
                 </label>
-                <input id="name" formControlName="name" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input id="name" formControlName="name" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
                 <div *ngIf="name.errors && (name.dirty || name.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="name.errors['required']">Nazwa jest wymagana</div>
                     <div *ngIf="name.errors['pattern']">Nazwa zawiera niedozwolone znaki</div>
@@ -36,7 +36,7 @@
                 <label for="brand" class="block text-sm font-medium text-gray-700 mb-1">
                     Marka
                 </label>
-                <input id="brand" formControlName="brand" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input id="brand" formControlName="brand" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
                 <div *ngIf="brand.errors && (brand.dirty || brand.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="brand.errors['pattern']">Marka zawiera niedozwolone znaki</div>
                     <div *ngIf="brand.errors['backend']">{{ brand.errors['backend'] }}</div>
@@ -47,7 +47,7 @@
                 <label for="model" class="block text-sm font-medium text-gray-700 mb-1">
                     Model
                 </label>
-                <input id="model" formControlName="model" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input id="model" formControlName="model" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
                 <div *ngIf="model.errors && (model.dirty || model.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="model.errors['pattern']">Model zawiera niedozwolone znaki</div>
                     <div *ngIf="model.errors['backend']">{{ model.errors['backend'] }}</div>
@@ -58,7 +58,7 @@
                 <label for="type" class="block text-sm font-medium text-gray-700 mb-1">
                     Typ
                 </label>
-                <input id="type" formControlName="type" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input id="type" formControlName="type" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
                 <div *ngIf="type.errors && (type.dirty || type.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="type.errors['required']">Typ jest wymagany</div>
                     <div *ngIf="type.errors['pattern']">Typ zawiera niedozwolone znaki</div>
@@ -70,14 +70,14 @@
                 <label for="purchaseDate" class="block text-sm font-medium text-gray-700 mb-1">
                     Data zakupu
                 </label>
-                <input id="purchaseDate" formControlName="purchaseDate" type="date" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input id="purchaseDate" formControlName="purchaseDate" type="date" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
             </div>
 
             <div>
                 <label for="serialNumber" class="block text-sm font-medium text-gray-700 mb-1">
                     Numer seryjny
                 </label>
-                <input id="serialNumber" formControlName="serialNumber" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input id="serialNumber" formControlName="serialNumber" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
                 <div *ngIf="serialNumber.errors && (serialNumber.dirty || serialNumber.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="serialNumber.errors['pattern']">Numer seryjny zawiera niedozwolone znaki</div>
                     <div *ngIf="serialNumber.errors['backend']">{{ serialNumber.errors['backend'] }}</div>
@@ -88,7 +88,7 @@
                 <label for="mileageKm" class="block text-sm font-medium text-gray-700 mb-1">
                     Przebieg (km)
                 </label>
-                <input id="mileageKm" formControlName="mileageKm" type="number" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input id="mileageKm" formControlName="mileageKm" type="number" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
                 <div *ngIf="mileageKm.errors && (mileageKm.dirty || mileageKm.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="mileageKm.errors['pattern']">Przebieg zawiera niedozwolone znaki</div>
                     <div *ngIf="mileageKm.errors['backend']">{{ mileageKm.errors['backend'] }}</div>
@@ -99,7 +99,7 @@
                 <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
                     Opis
                 </label>
-                <textarea id="description" formControlName="description" class="w-full border rounded-md px-3 py-2 min-h-[65px] resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                <textarea id="description" formControlName="description" class="w-full border rounded-md px-3 py-2 min-h-[65px] resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull></textarea>
                 <div *ngIf="description.errors && (description.dirty || description.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="description.errors['pattern']">Opis zawiera niedozwolone znaki</div>
                     <div *ngIf="description.errors['backend']">{{ description.errors['backend'] }}</div>

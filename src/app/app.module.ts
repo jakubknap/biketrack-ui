@@ -29,6 +29,7 @@ import { RepairAddModalComponent } from './pages/repair/modals/repair-add-modal/
 import { RepairEditModalComponent } from './pages/repair/modals/repair-edit-modal/repair-edit-modal.component';
 import { RepairDeleteModalComponent } from './pages/repair/modals/repair-delete-modal/repair-delete-modal.component';
 import { RepairDetailsModalComponent } from './pages/repair/modals/repair-details-modal/repair-details-modal.component';
+import { EmptyToNullDirective } from './shared/directives/empty-to-null.directive';
 
 registerLocaleData(localePl);
 
@@ -56,7 +57,8 @@ registerLocaleData(localePl);
     RepairAddModalComponent,
     RepairEditModalComponent,
     RepairDeleteModalComponent,
-    RepairDetailsModalComponent
+    RepairDetailsModalComponent,
+    EmptyToNullDirective
   ],
   imports: [
     BrowserModule,
