@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
@@ -6,7 +6,7 @@ import { safeTextValidator } from 'src/app/shared/validators/form-validators';
 import { ReapirService } from '../../service/reapir.service';
 import { AddRepairRequest } from '../../model/repair.model';
 import { BikeService } from 'src/app/pages/bike/service/bike.service';
-import { BikeListToSelect } from 'src/app/pages/bike/model/bike.model';
+import { BikeDto, BikeListToSelect } from 'src/app/pages/bike/model/bike.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
   templateUrl: './repair-add-modal.component.html'
 })
 export class RepairAddModalComponent implements OnInit {
+
+  @Input() bikeDto: BikeDto | null = null;
 
   @ViewChild('modalContent') modalContent!: ElementRef;
 
@@ -34,7 +36,8 @@ export class RepairAddModalComponent implements OnInit {
 
   ngOnInit() {
     this.addRepairForm = this.formBuilder.group({
-      bikeUuid: [null, Validators.required],
+      bikeUuid: [this.bikeDto ? this.bikeDto.uuid : null, Validators.required],
+      bikeName: [this.bikeDto ? { value: this.bikeDto.name, disabled: true } : null],
       title: [null, [safeTextValidator, Validators.required]],
       description: [null, safeTextValidator],
       cost: [null, [Validators.min(0), Validators.pattern(/^-?\d+(\,\d{1,2})?$/)]],
@@ -47,6 +50,10 @@ export class RepairAddModalComponent implements OnInit {
 
   get bikeUuid() {
     return this.addRepairForm.get('bikeUuid')!;
+  }
+
+  get bikeName() {
+    return this.addRepairForm.get('bikeName')!;
   }
 
   get title() {

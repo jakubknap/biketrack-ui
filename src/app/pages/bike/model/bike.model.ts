@@ -1,3 +1,5 @@
+import { Money } from "src/app/shared/models/money";
+
 export interface BikeList {
   uuid: string;
   name: string;
@@ -6,13 +8,15 @@ export interface BikeList {
 export interface BikeDetails {
   bikeUuid: string;
   name: string;
-  brand: string | null;
-  model: string | null;
+  brand?: string;
+  model?: string;
   type: string;
-  purchaseDate: Date | null;
-  serialNumber: string | null;
-  mileageKm: string | null;
-  description: string | null;
+  purchaseDate?: Date;
+  serialNumber?: string;
+  mileageKm?: string;
+  description?: string;
+  createdDate: Date;
+  lastModifiedDate?: Date;
 }
 
 export interface BikeDto {
@@ -46,4 +50,20 @@ export interface EditBikeRequest {
 export interface BikeListToSelect {
   uuid: string;
   name: string;
+}
+
+export interface BikeRepairStatistics {
+  totalRepairs: number;
+  totalRepairCost: Money;
+  dateOfLastRepair?: Date;
+  dateOfFirstRepair?: Date;
+  averageRepairCost: Money;
+  repairsThisYear: number;
+}
+
+export interface BikeRepair {
+  repairUuid: string;
+  title: string;
+  cost?: Money;
+  createdDate: string;
 }

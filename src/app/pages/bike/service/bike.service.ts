@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { BaseService } from '../../../shared/services/base.service';
 import { Page } from '../../../shared/models/page';
-import { BikeDetails, BikeList, BikeListToSelect } from 'src/app/pages/bike/model/bike.model';
+import { BikeDetails, BikeList, BikeListToSelect, BikeRepair, BikeRepairStatistics } from 'src/app/pages/bike/model/bike.model';
 import { BaseResponse } from '../../../shared/models/api-response';
 
 @Injectable({
@@ -49,6 +49,24 @@ export class BikeService extends BaseService {
 
   deleteBike(bikeUuid: string): Observable<BaseResponse> {
     return this.http.delete<BaseResponse>(`${this.baseUrl}/${this.bikesPrefix}/${bikeUuid}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getBikeStatistics(bikeUuid: string): Observable<BikeRepairStatistics> {
+    return this.http.get<BikeRepairStatistics>(`${this.baseUrl}/${this.bikesPrefix}/${bikeUuid}/statistics`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getBikeRepairs(bikeUuid: string, page: number, size: number, sortColumn: string, sortDirection: string): Observable<Page<BikeRepair>> {
+    return this.http.get<Page<BikeRepair>>(`${this.baseUrl}/${this.bikesPrefix}/${bikeUuid}/repairs`, {
+      params: {
+        page: page,
+        size: size,
+        sort: `${sortColumn},${sortDirection}`
+      }
+    }).pipe(
       catchError(this.handleError)
     );
   }

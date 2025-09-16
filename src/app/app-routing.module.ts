@@ -13,6 +13,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UserLayoutComponent } from './layouts/user-layout/user-layout.component';
 import { BikeComponent } from './pages/bike/bike.component';
 import { RepairComponent } from './pages/repair/repair.component';
+import { BikeDetailsComponent } from './pages/bike/bike-details/bike-details.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent, canActivate: [noAuthGuard] },
@@ -28,6 +29,7 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'bikes', component: BikeComponent },
+      { path: 'bikes/:bikeUuid', component: BikeDetailsComponent },
       { path: 'repairs', component: RepairComponent }
     ]
   },

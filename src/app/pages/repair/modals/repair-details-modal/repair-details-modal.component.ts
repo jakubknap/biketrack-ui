@@ -3,7 +3,7 @@ import { ReapirService } from '../../service/reapir.service';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 import { RepairDetails } from '../../model/repair.model';
 import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-repair-details-modal',
@@ -23,7 +23,8 @@ export class RepairDetailsModalComponent implements OnInit {
   fullscreenIndex: number | null = null;
 
   constructor(private repairService: ReapirService,
-              private router: Router) { }
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.fetchData();
@@ -80,12 +81,28 @@ export class RepairDetailsModalComponent implements OnInit {
 
   openEditModal() {
     this.close();
-    this.router.navigate(['/repairs'], { queryParams: { modal: 'edit', repairUuid: this.repairUuid } });
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        modal: 'edit',
+        repairUuid: this.repairUuid
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 
   openDeleteModal() {
     this.close();
-    this.router.navigate(['/repairs'], { queryParams: { modal: 'delete', repairUuid: this.repairUuid, repairName: this.repair?.title } });
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        modal: 'delete',
+        repairUuid: this.repairUuid,
+        repairName: this.repair?.title
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 
   private mapErrorMessage(status: string): string {

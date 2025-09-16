@@ -30,6 +30,7 @@ import { RepairEditModalComponent } from './pages/repair/modals/repair-edit-moda
 import { RepairDeleteModalComponent } from './pages/repair/modals/repair-delete-modal/repair-delete-modal.component';
 import { RepairDetailsModalComponent } from './pages/repair/modals/repair-details-modal/repair-details-modal.component';
 import { EmptyToNullDirective } from './shared/directives/empty-to-null.directive';
+import { BikeDetailsComponent } from './pages/bike/bike-details/bike-details.component';
 
 registerLocaleData(localePl);
 
@@ -58,7 +59,8 @@ registerLocaleData(localePl);
     RepairEditModalComponent,
     RepairDeleteModalComponent,
     RepairDetailsModalComponent,
-    EmptyToNullDirective
+    EmptyToNullDirective,
+    BikeDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,337 @@
+<div *ngIf="!globalLoading && globalErrorMessage" class="flex justify-center py-12">
+  <div class="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md shadow-md">
+    <p class="text-red-700 text-lg mb-4">{{ bikeErrorMessage }}</p>
+    <button (click)="fetchData()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition font-semibold">
+      Spróbuj ponownie
+    </button>
+  </div>
+</div>
+
+<div *ngIf="bike && !bikeLoading && !bikeErrorMessage" class="flex justify-between items-center mb-6 mt-1">
+  <h2 class="text-3xl font-bold text-gray-800">{{ bike.name }}</h2>
+  <div class="flex gap-2">
+    <button (click)="goBack()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+      Wróć
+    </button>
+
+    <button (click)="openEditBikeModal(bike!.bikeUuid)" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition">
+      Edytuj
+    </button>
+
+    <button (click)="openDeleteBikeModal(bike!.bikeUuid, bike!.name)" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition">
+      Usuń
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!globalLoading && !globalErrorMessage" class="space-y-8">
+  <div *ngIf="bike && !bikeLoading && !bikeErrorMessage" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+    <div class="col-span-1">
+      <div class="w-full h-64 bg-gray-100 flex justify-center items-center rounded-lg overflow-hidden">
+        <!-- <img *ngIf="bike.phooz; else noPhoto" [src]="getBikePhotoUrl(bike.photoFileName)"
+        alt="Zdjęcie roweru" class="max-w-full max-h-full object-contain">
+        <ng-template #noPhoto>
+        <img src="assets/images/IMG_6613.JPEG" alt="Placeholder" class="max-w-full max-h-full object-contain">
+        </ng-template> -->
+        <img src="assets/images/IMG_6613.JPEG" alt="Placeholder" class="max-w-full max-h-full object-contain">
+      </div>
+    </div>
+    <div class="col-span-2 space-y-4">
+      <div>
+        <h4 class="text-sm font-semibold text-gray-600">Marka</h4>
+        <p *ngIf="bike.brand; else noBrand" class="text-gray-800">
+          {{ bike.brand }}
+        </p>
+
+        <ng-template #noBrand>
+          <p class="text-gray-400 italic">Brak informacji</p>
+        </ng-template>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-600">Model</h4>
+        <p *ngIf="bike.model; else noModel" class="text-gray-800">
+          {{ bike.model }}
+        </p>
+
+        <ng-template #noModel>
+          <p class="text-gray-400 italic">Brak informacji</p>
+        </ng-template>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-600">Typ</h4>
+        <p class="text-gray-800">{{ bike.type }}</p>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-600">Numer seryjny</h4>
+        <p *ngIf="bike.serialNumber; else noSerialNumber" class="text-gray-800">
+          {{ bike.serialNumber }}
+        </p>
+
+        <ng-template #noSerialNumber>
+          <p class="text-gray-400 italic">Brak informacji</p>
+        </ng-template>
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-600">Data zakupu</h4>
+        <p *ngIf="bike.purchaseDate; else noPurchaseDate" class="text-gray-800">
+          {{ bike.purchaseDate | date:"mediumDate" }}
+        </p>
+
+        <ng-template #noPurchaseDate>
+          <p class="text-gray-400 italic">Brak informacji</p>
+        </ng-template>
+
+      </div>
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-800">Opis</h4>
+        <p class="text-gray-700 whitespace-pre-line" *ngIf="bike.description; else noDescription">
+          {{ bike.description }}
+        </p>
+
+        <ng-template #noDescription>
+          <p class="text-gray-400 italic">Brak informacji</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Statystyki roweru</h2>
+
+    <div *ngIf="!bikeStatsLoading && bikeStatsErrorMessage" class="flex justify-center">
+      <div class="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md shadow-md">
+        <svg class="mx-auto mb-4 w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12c0 4.9706-4.0294 9-9 9s-9-4.0294-9-9 4.0294-9 9-9 9 4.0294 9 9z"/>
+        </svg>
+
+        <p class="text-red-700 text-lg mb-4">{{ bikeStatsErrorMessage }}</p>
+
+        <button (click)="getBikeStats()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition font-semibold">
+         Spróbuj ponownie
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="bikeStatsLoading && !bikeStatsErrorMessage" class="bg-gray-50 p-6 rounded-lg shadow-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div *ngFor="let _ of [1,2,3,4,5,6]">
+          <div class="h-4 w-32 bg-gray-200 animate-pulse rounded mb-2"></div>
+          <div class="h-6 w-24 bg-gray-300 animate-pulse rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!bikeStatsLoading && !bikeStatsErrorMessage && bikeStats" class="bg-gray-50 p-6 rounded-lg shadow-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+        <div>
+          <h4 class="text-sm font-semibold text-gray-600">Łączna liczba napraw</h4>
+          <p class="text-gray-800">{{ bikeStats.totalRepairs }}</p>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-semibold text-gray-600">Łączny koszt napraw</h4>
+          <p class="text-gray-800">
+            {{ (bikeStats.totalRepairCost.amount | number:'1.2-2') || '0,00' }} {{ (bikeStats.totalRepairCost.currency | formatCurrency) || 'zł' }}
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-semibold text-gray-600">Średni koszt naprawy</h4>
+          <p class="text-gray-800">
+            {{ (bikeStats.averageRepairCost.amount | number:'1.2-2') || '0,00' }} {{ (bikeStats.averageRepairCost.currency | formatCurrency) || 'zł' }}
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-semibold text-gray-600">Ostatnia naprawa</h4>
+          <p *ngIf="bikeStats.dateOfLastRepair; else noDateOfLastRepair" class="text-gray-800">
+            {{ bikeStats.dateOfLastRepair | date:"medium" }}
+          </p>
+
+          <ng-template #noDateOfLastRepair>
+            <p class="text-gray-400 italic">Brak informacji</p>
+          </ng-template>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-semibold text-gray-600">Pierwsza naprawa</h4>
+          <p *ngIf="bikeStats.dateOfFirstRepair; else noDateOfFirstRepair" class="text-gray-800">
+            {{ bikeStats.dateOfFirstRepair | date:"medium" }}
+          </p>
+
+          <ng-template #noDateOfFirstRepair>
+            <p class="text-gray-400 italic">Brak informacji</p>
+          </ng-template>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-semibold text-gray-600">Naprawy w tym roku</h4>
+          <p *ngIf="bikeStats.repairsThisYear != null; else noRepairsThisYear" class="text-gray-800">
+            {{ bikeStats.repairsThisYear }}
+          </p>
+
+          <ng-template #noRepairsThisYear>
+            <p class="text-gray-400 italic">Brak informacji</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-between items-center mb-6 mt-1">
+    <h2 class="text-3xl font-bold text-gray-800">Naprawy</h2>
+
+    <button *ngIf="!bikeRepairsLoading && !bikeRepairsErrorMessage" (click)="openAddRepairModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+      <span class="text-xl font-bold">+</span> Dodaj naprawę
+    </button>
+  </div>
+
+  <div *ngIf="!bikeRepairsLoading && bikeRepairsErrorMessage" class="flex justify-center">
+    <div class="bg-red-50 border border-red-200 rounded-xl p-8 text-center max-w-md shadow-md">
+
+      <svg class="mx-auto mb-4 w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12c0 4.9706-4.0294 9-9 9s-9-4.0294-9-9 4.0294-9 9-9 9 4.0294 9 9z"/>
+      </svg>
+
+      <p class="text-red-700 text-lg mb-4">{{ bikeRepairsErrorMessage }}</p>
+
+      <button (click)="getBikeRepairs()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition font-semibold">
+        Spróbuj ponownie
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!bikeRepairsLoading && !bikeRepairsErrorMessage && bikeRepairs.length === 0" class="flex flex-col items-center justify-center space-y-6">
+
+    <h3 class="text-2xl font-bold text-gray-700 text-center">
+      Ten rower nie ma jeszcze żadnych napraw
+    </h3>
+
+    <button (click)="openAddRepairModal()" class="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition font-semibold shadow-lg">
+      <span class="text-xl font-bold">+</span> Dodaj pierwszą naprawę
+    </button>
+  </div>
+
+  <div *ngIf="(!bikeRepairsLoading && !bikeRepairsErrorMessage && bikeRepairs.length > 0) || (bikeRepairsLoading && !bikeRepairsErrorMessage)" class="overflow-x-auto bg-white rounded-xl shadow">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+      <tr>
+        <th (click)="!bikeRepairsLoading && sortData('title')" [ngClass]="{ 'cursor-pointer': !bikeRepairsLoading, 'cursor-default text-gray-400': bikeRepairsLoading }" class="px-6 py-3 text-left text-sm font-semibold">
+          Naprawa
+          <span *ngIf="repairsSortColumn === 'title' && !bikeRepairsLoading">
+            {{ repairsSortDirection === 'asc' ? '▲' : '▼' }}
+         </span>
+        </th>
+
+        <th (click)="!bikeRepairsLoading && sortData('createdDate')" [ngClass]="{ 'cursor-pointer': !bikeRepairsLoading, 'cursor-default text-gray-400': bikeRepairsLoading }" class="px-6 py-3 text-left text-sm font-semibold">
+          Data utworzenia
+          <span *ngIf="repairsSortColumn === 'createdDate' && !bikeRepairsLoading">
+            {{ repairsSortDirection === 'asc' ? '▲' : '▼' }}
+         </span>
+        </th>
+
+        <th (click)="!bikeRepairsLoading && sortData('cost')" [ngClass]="{ 'cursor-pointer': !bikeRepairsLoading, 'cursor-default text-gray-400': bikeRepairsLoading }" class="px-6 py-3 text-left text-sm font-semibold">
+          Koszt
+          <span *ngIf="repairsSortColumn === 'cost' && !bikeRepairsLoading">
+            {{ repairsSortDirection === 'asc' ? '▲' : '▼' }}
+         </span>
+        </th>
+
+        <th [ngClass]="{'cursor-default text-gray-400': bikeRepairsLoading }" class="px-6 py-3 text-center text-sm font-semibold">Akcje </th>
+      </tr>
+      </thead>
+
+      <tbody *ngIf="bikeRepairsLoading && !bikeRepairsErrorMessage">
+      <tr *ngFor="let _ of [1,2]">
+        <td class="px-6 py-4">
+          <div class="h-4 w-24 bg-gray-200 animate-pulse rounded"></div>
+        </td>
+        <td class="px-6 py-4">
+          <div class="h-4 w-32 bg-gray-200 animate-pulse rounded"></div>
+        </td>
+        <td class="px-6 py-4">
+          <div class="h-4 w-20 bg-gray-200 animate-pulse rounded"></div>
+        </td>
+        <td class="px-6 py-4 text-center">
+          <div class="h-8 w-24 bg-gray-200 animate-pulse rounded mx-auto"></div>
+        </td>
+      </tr>
+      </tbody>
+
+      <tbody class="divide-y divide-gray-200" *ngIf="!bikeRepairsLoading && !bikeRepairsErrorMessage && bikeRepairs.length > 0">
+
+      <tr *ngFor="let repair of bikeRepairs">
+
+        <td class="px-6 py-4">
+          <p class="font-medium text-gray-800">{{ repair.title }}</p>
+        </td>
+
+        <td class="px-6 py-4 text-gray-600">
+          {{ repair.createdDate | date:'mediumDate' }}
+        </td>
+
+        <td class="px-6 py-4 text-gray-800 font-semibold">
+          <p *ngIf="repair.cost && repair.cost.amount && repair.cost.currency; else noCost">
+            {{ repair.cost.amount | number:'1.2-2' }} {{ repair.cost.currency | formatCurrency }}
+          </p>
+
+          <ng-template #noCost>
+            <p class="text-gray-400 italic">Brak informacji</p>
+          </ng-template>
+        </td>
+
+        <td class="px-6 py-4">
+          <div class="flex gap-2 justify-center">
+            <button (click)="openRepairDetailsModal(repair.repairUuid)" class="px-3 py-1.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition">
+              Szczegóły
+            </button>
+
+            <button (click)="openEditRepairModal(repair.repairUuid)" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition">
+              Edytuj
+            </button>
+
+            <button (click)="openDeleteRepairModal(repair.repairUuid, repair.title)" class="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition">
+              Usuń
+            </button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4" class="px-6 py-4 text-center">
+          <div class="flex justify-center gap-8">
+            <button (click)="goToPreviousPage()" [disabled]="repairsIsFirstPage" class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+
+            <p class="text-slate-600">
+              Strona <strong class="text-slate-800"> {{ repairsCurrentPage + 1 }}</strong> z&nbsp;<strong class="text-slate-800">{{ repairsTotalPages }}</strong>
+            </p>
+
+            <button (click)="goToNextPage()" [disabled]="reparisIsLastPage" class="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<app-bike-edit-modal *ngIf="showEditBikeModal" [bikeUuid]="selectedBike?.uuid!" (closed)="handleBikeModalClosed($event)"></app-bike-edit-modal>
+<app-bike-delete-modal *ngIf="showDeleteBikeModal" [bikeDto]="selectedBike!" (closed)="handleBikeModalClosed($event)"></app-bike-delete-modal>
+
+<app-repair-add-modal *ngIf="showAddRepairModal" [bikeDto]="{uuid: bike?.bikeUuid! , name: bike?.name!}" (closed)="handleRepairModalClosed($event)"></app-repair-add-modal>
+<app-repair-details-modal *ngIf="showRepairsDetailsModal" [repairUuid]="selectedRepair?.uuid!" (closed)="handleRepairModalClosed($event)"></app-repair-details-modal>
+<app-repair-edit-modal *ngIf="showEditRepairModal" [repairUuid]="selectedRepair?.uuid!" (closed)="handleRepairModalClosed($event)"></app-repair-edit-modal>
+<app-repair-delete-modal *ngIf="showDeleteRepairModal" [repairDto]="selectedRepair!" (closed)="handleRepairModalClosed($event)"></app-repair-delete-modal>
