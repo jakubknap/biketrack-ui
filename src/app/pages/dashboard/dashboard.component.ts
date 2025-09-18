@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  openBikeDetailsModal(bikeUuid?: string) {
+  openBikeDetails(bikeUuid?: string) {
     this.router.navigate([`/bikes/${bikeUuid}`]);
   }
 

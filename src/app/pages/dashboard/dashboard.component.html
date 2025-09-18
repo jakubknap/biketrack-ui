@@ -55,7 +55,7 @@
 
       <ng-container *ngIf="!loading && !errorMessage">
         <p *ngIf="stats?.recentlyAddedBike; else noBike" class="text-gray-600">
-          <a (click)="openBikeDetailsModal(stats?.recentlyAddedBike?.uuid)" class="text-gray-700 hover:text-blue-600 hover:underline underline-offset-4 cursor-pointer transition-colors">
+          <a (click)="openBikeDetails(stats?.recentlyAddedBike?.uuid)" class="text-gray-700 hover:text-blue-600 hover:underline underline-offset-4 cursor-pointer transition-colors">
             {{ stats?.recentlyAddedBike?.name }}
           </a>
         </p>

@@ -5,6 +5,7 @@ import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BikeService } from '../service/bike.service';
 import { validate as isValidUUID } from 'uuid';
+import { ApiErrorResponse } from 'src/app/shared/models/api-response';
 
 @Component({
   selector: 'app-bike-details',
@@ -60,7 +61,7 @@ export class BikeDetailsComponent implements OnInit {
 
     if (!this.bikeUuid || !isValidUUID(this.bikeUuid)) {
       this.globalLoading = false;
-      this.globalErrorMessage = 'Zły link coś tam';//todo
+      this.globalErrorMessage = 'Ups! Ten rower nie istnieje lub link jest nieprawidłowy.';
       return;
     }
 
@@ -94,7 +95,15 @@ export class BikeDetailsComponent implements OnInit {
         this.bike = response;
         this.bikeLoading = false;
       },
-      error: () => {
+      error: (error: ApiErrorResponse) => {
+        let status = error.status;
+
+        if (status === 'E05000') {
+          this.globalLoading = false;
+          this.globalErrorMessage = 'Ups! Ten rower nie istnieje lub link jest nieprawidłowy.';
+          return;
+        };
+
         this.bikeErrorMessage = 'Nie udało się pobrać danych z serwera.';
         this.bikeLoading = false;
       }
@@ -219,7 +228,7 @@ export class BikeDetailsComponent implements OnInit {
     this.blockScroll();
   }
 
-  handleBikeModalClosed(event: { status: ModalCloseStatus }) {
+  handleEditBikeModalClosed(event: { status: ModalCloseStatus }) {
     this.showEditBikeModal = false;
     this.showDeleteBikeModal = false;
     this.selectedBike = null;
@@ -227,6 +236,17 @@ export class BikeDetailsComponent implements OnInit {
 
     if (ModalCloseStatus.SUCCESS === event.status) {
       this.fetchData();
+    }
+  }
+
+  handleDeleteBikeModalClosed(event: { status: ModalCloseStatus }) {
+    this.showEditBikeModal = false;
+    this.showDeleteBikeModal = false;
+    this.selectedBike = null;
+    this.unblockScroll();
+
+    if (ModalCloseStatus.SUCCESS === event.status) {
+      this.router.navigate(['/bikes']);
     }
   }
 

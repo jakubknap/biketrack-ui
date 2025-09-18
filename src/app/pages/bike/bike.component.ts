@@ -88,6 +88,10 @@ export class BikeComponent implements OnInit {
     }
   }
 
+  openBikeDetails(bikeUuid?: string) {
+    this.router.navigate([`/bikes/${bikeUuid}`]);
+  }
+
   private findAllBikes() {
     this.bikeService.getBikeList(this.currentPage, this.pageSize).subscribe({
       next: response => {
