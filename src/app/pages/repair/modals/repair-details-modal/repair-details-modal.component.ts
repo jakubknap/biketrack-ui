@@ -20,7 +20,11 @@ export class RepairDetailsModalComponent implements OnInit {
   loading = false;
   errorMessage: string | null = null;
 
+  photoLoading = false;
+  photoError: string | null = null;
   fullscreenIndex: number | null = null;
+
+  private createdObjectUrls: string[] = [];
 
   constructor(private repairService: ReapirService,
               private router: Router,
@@ -37,6 +41,7 @@ export class RepairDetailsModalComponent implements OnInit {
     this.repairService.getRepairDetails(this.repairUuid).subscribe({
       next: (response) => {
         this.repair = response;
+        this.loadPhotos();
         this.loading = false;
       },
       error: (error: ApiErrorResponse) => {
@@ -49,6 +54,7 @@ export class RepairDetailsModalComponent implements OnInit {
   }
 
   close() {
+    this.revokeObjectUrls();
     this.closed.emit({ status: ModalCloseStatus.DISMISSED });
   }
 
@@ -79,6 +85,19 @@ export class RepairDetailsModalComponent implements OnInit {
     }
   }
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if (this.fullscreenIndex !== null) {
+      if (event.key === 'Escape') {
+        this.closePhoto();
+      } else if (event.key === 'ArrowLeft') {
+        this.prevPhoto();
+      } else if (event.key === 'ArrowRight') {
+        this.nextPhoto();
+      }
+    }
+  }
+
   openEditModal() {
     this.close();
     this.router.navigate([], {
@@ -105,6 +124,29 @@ export class RepairDetailsModalComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.revokeObjectUrls();
+  }
+
+  private loadPhotos(): void {
+    if (!this.repair) return;
+
+    this.photoLoading = true;
+    this.photoError = null;
+
+    this.repairService.getRepairPhotoUrls(this.repairUuid).subscribe({
+      next: (urls) => {
+        this.repair!.photos = urls;
+        this.createdObjectUrls.push(...urls);
+        this.photoLoading = false;
+      },
+      error: (err) => {
+        this.photoError = 'Nie udało się załadować zdjęć';
+        this.photoLoading = false;
+      }
+    });
+  }
+
   private mapErrorMessage(status: string): string {
     switch (status) {
       case 'E06000':
@@ -116,16 +158,13 @@ export class RepairDetailsModalComponent implements OnInit {
     }
   }
 
-  @HostListener('document:keydown', ['$event'])
-  handleKeydown(event: KeyboardEvent) {
-    if (this.fullscreenIndex !== null) {
-      if (event.key === 'Escape') {
-        this.closePhoto();
-      } else if (event.key === 'ArrowLeft') {
-        this.prevPhoto();
-      } else if (event.key === 'ArrowRight') {
-        this.nextPhoto();
-      }
-    }
+  private revokeObjectUrls(): void {
+    if (!this.createdObjectUrls || this.createdObjectUrls.length === 0) return;
+    this.createdObjectUrls.forEach(u => {
+      try {
+        URL.revokeObjectURL(u);
+      } catch (e) { }
+    });
+    this.createdObjectUrls = [];
   }
 }

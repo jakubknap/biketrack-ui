@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
@@ -8,12 +8,18 @@ import { AddRepairRequest } from '../../model/repair.model';
 import { BikeService } from 'src/app/pages/bike/service/bike.service';
 import { BikeDto, BikeListToSelect } from 'src/app/pages/bike/model/bike.model';
 import { Router } from '@angular/router';
+import { PhotoFile } from 'src/app/shared/models/file';
 
 @Component({
   selector: 'app-repair-add-modal',
   templateUrl: './repair-add-modal.component.html'
 })
 export class RepairAddModalComponent implements OnInit {
+
+  readonly MAX_PHOTOS = 10;
+  readonly MAX_FILE_SIZE_MB = 10;
+  readonly MAX_TOTAL_SIZE_MB = 100;
+  readonly ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
   @Input() bikeDto: BikeDto | null = null;
 
@@ -23,6 +29,10 @@ export class RepairAddModalComponent implements OnInit {
 
   addRepairForm!: FormGroup;
   bikes: BikeListToSelect[] = [];
+
+  photos: PhotoFile[] = [];
+  photoErrors: string[] = [];
+  fullscreenIndex: number | null = null;
 
   loading = false;
   loadingBikes = false;
@@ -52,10 +62,6 @@ export class RepairAddModalComponent implements OnInit {
     return this.addRepairForm.get('bikeUuid')!;
   }
 
-  get bikeName() {
-    return this.addRepairForm.get('bikeName')!;
-  }
-
   get title() {
     return this.addRepairForm.get('title')!;
   }
@@ -74,6 +80,10 @@ export class RepairAddModalComponent implements OnInit {
 
   get repairDate() {
     return this.addRepairForm.get('repairDate')!;
+  }
+
+  get totalPhotosSizeMB(): number {
+    return this.photos.reduce((sum, f) => sum + f.size, 0) / (1024 * 1024);
   }
 
   fetchBikes() {
@@ -96,6 +106,94 @@ export class RepairAddModalComponent implements OnInit {
 
   openAddBikeModal() {
     this.router.navigate(['/bikes'], { queryParams: { modal: 'add' } });
+  }
+
+  onFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files) return;
+
+    const selectedFiles = Array.from(input.files);
+    this.photoErrors = [];
+
+    const remainingSlots = this.MAX_PHOTOS - this.photos.length;
+    if (remainingSlots <= 0) {
+      this.photoErrors.push(`Możesz mieć maksymalnie ${this.MAX_PHOTOS} zdjęć.`);
+      input.value = '';
+      return;
+    }
+
+    let totalSize = this.photos.reduce((sum, f) => sum + f.size, 0);
+
+    for (const file of selectedFiles) {
+      const ext = file.name.split('.').pop()?.toLowerCase();
+      const fileSizeMB = file.size / (1024 * 1024);
+
+      if (!file.type.startsWith('image/') || !ext || !this.ALLOWED_EXTENSIONS.includes(ext)) {
+        this.photoErrors.push(`❌ ${file.name} – niedozwolony format.`);
+        continue;
+      }
+
+      if (fileSizeMB > this.MAX_FILE_SIZE_MB) {
+        this.photoErrors.push(`❌ ${file.name} – przekracza ${this.MAX_FILE_SIZE_MB} MB.`);
+        continue;
+      }
+
+      if (totalSize + file.size > this.MAX_TOTAL_SIZE_MB * 1024 * 1024) {
+        this.photoErrors.push(`❌ ${file.name} – przekroczyłby łączny limit ${this.MAX_TOTAL_SIZE_MB} MB.`);
+        continue;
+      }
+
+      if (this.photos.length >= this.MAX_PHOTOS) {
+        this.photoErrors.push(`❌ ${file.name} – limit ${this.MAX_PHOTOS} zdjęć osiągnięty.`);
+        break;
+      }
+
+      this.photos.push(this.createRepairPhotoFile(file));
+      totalSize += file.size;
+    }
+
+    input.value = '';
+  }
+
+  dismissPhotoError(index: number) {
+    this.photoErrors.splice(index, 1);
+  }
+
+  removePhoto(index: number): void {
+    if (!this.photos[index]) return;
+    URL.revokeObjectURL(this.photos[index].previewUrl);
+    this.photos.splice(index, 1);
+  }
+
+  openPhoto(index: number) {
+    this.fullscreenIndex = index;
+  }
+
+  closePhoto() {
+    this.fullscreenIndex = null;
+  }
+
+  prevPhoto(event?: Event) {
+    event?.stopPropagation();
+    if (this.fullscreenIndex !== null && this.fullscreenIndex > 0) {
+      this.fullscreenIndex--;
+    }
+  }
+
+  nextPhoto(event?: Event) {
+    event?.stopPropagation();
+    if (this.fullscreenIndex !== null && this.fullscreenIndex < this.photos.length - 1) {
+      this.fullscreenIndex++;
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if (this.fullscreenIndex !== null) {
+      if (event.key === 'Escape') this.closePhoto();
+      else if (event.key === 'ArrowLeft') this.prevPhoto();
+      else if (event.key === 'ArrowRight') this.nextPhoto();
+    }
   }
 
   onSubmit() {
@@ -133,11 +231,19 @@ export class RepairAddModalComponent implements OnInit {
     this.closed.emit({ status: ModalCloseStatus.DISMISSED });
   }
 
+  private createRepairPhotoFile(file: File): PhotoFile {
+    return Object.assign(file, {
+      previewUrl: URL.createObjectURL(file)
+    });
+  }
+
   private prepareRequest(): FormData {
     const formData = new FormData();
     const addRepairRequest: AddRepairRequest = this.prepareAddRepairRequest();
 
     formData.append('repairData', new Blob([JSON.stringify(addRepairRequest)], { type: 'application/json' }));
+
+    this.photos.forEach(file => formData.append('repairPhotos', file, file.name));
 
     return formData;
   }
