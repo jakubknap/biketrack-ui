@@ -100,6 +100,17 @@ export class BikeComponent implements OnInit {
         this.totalPages = response.totalPages;
         this.isFirstPage = response.first;
         this.isLastPage = response.last;
+
+        this.bikeList.forEach(bike => {
+          if (bike.photo) {
+            this.bikeService.getBikePhotoUrl(bike.photo).subscribe(url => {
+              bike.previewUrl = url || 'assets/images/placeholder.png';
+            });
+          } else {
+            bike.previewUrl = 'assets/images/placeholder.png';
+          }
+        });
+
         this.loading = false;
 
         this.checkQueryParams();

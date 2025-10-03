@@ -75,14 +75,7 @@
     <div *ngIf="bike && !bikeLoading && !bikeErrorMessage" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
       <div class="col-span-1">
         <div class="w-full h-64 bg-gray-100 flex justify-center items-center rounded-lg overflow-hidden">
-          <!-- <img *ngIf="bike.photoFileName; else noPhoto"
-          [src]="getBikePhotoUrl(bike.photoFileName)"
-          alt="Zdjęcie roweru"
-          class="max-w-full max-h-full object-contain">
-          <ng-template #noPhoto>
-          <img src="assets/images/IMG_6613.JPEG" alt="Placeholder" class="max-w-full max-h-full object-contain">
-          </ng-template> -->
-          <img src="assets/images/IMG_6613.JPEG" alt="Placeholder" class="max-w-full max-h-full object-contain">
+          <img [src]="bikePhotoUrl" alt="{{ bikePhotoUrl ? 'Zdjęcie roweru' : 'Brak zdjęcia roweru' }}" class="max-w-full max-h-full object-contain">
         </div>
       </div>
       <div class="col-span-2 space-y-4">

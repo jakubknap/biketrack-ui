@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { BaseService } from '../../../shared/services/base.service';
 import { Page } from '../../../shared/models/page';
 import { BikeDetails, BikeList, BikeListToSelect, BikeRepair, BikeRepairStatistics } from 'src/app/pages/bike/model/bike.model';
@@ -69,5 +69,41 @@ export class BikeService extends BaseService {
     }).pipe(
       catchError(this.handleError)
     );
+  }
+
+  getBikePhotoUrl(photoUuid: string): Observable<string> {
+    if (!photoUuid) return of('');
+
+    return this.http.get(`${this.baseUrl}/files/BIKES/${photoUuid}/inline`, { responseType: 'blob' }).pipe(
+      map(blob => URL.createObjectURL(blob)),
+      catchError(() => of(''))
+    );
+  }
+
+  getBikePhoto(photoUuid: string): Observable<File | null> {
+    return this.http.get(`${this.baseUrl}/files/BIKES/${photoUuid}/inline`, { responseType: 'blob' }).pipe(
+      map(blob => {
+        const ext = this.getExtensionFromMimeType(blob.type);
+        return new File([blob], `${photoUuid}.${ext}`, { type: blob.type });
+      }),
+      catchError(() => of(null))
+    );
+  }
+
+  private getExtensionFromMimeType(mimeType: string): string | null {
+    switch (mimeType) {
+      case 'image/jpeg':
+        return 'jpeg';
+      case 'image/jpg':
+        return 'jpg';
+      case 'image/png':
+        return 'png';
+      case 'image/gif':
+        return 'gif';
+      case 'image/webp':
+        return 'webp';
+      default:
+        return null;
+    }
   }
 }

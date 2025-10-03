@@ -18,6 +18,7 @@ export class BikeDetailsComponent implements OnInit {
   bike?: BikeDetails;
   bikeStats?: BikeRepairStatistics;
   bikeRepairs: BikeRepair[] = [];
+  bikePhotoUrl: string = 'assets/images/placeholder.png';
 
   globalLoading: boolean = true;
   globalErrorMessage: string | null = null;
@@ -93,6 +94,13 @@ export class BikeDetailsComponent implements OnInit {
     this.bikeService.getBikeDetails(this.bikeUuid!).subscribe({
       next: response => {
         this.bike = response;
+
+        if (response.photo) {
+          this.bikeService.getBikePhotoUrl(response.photo).subscribe(url => {
+            this.bikePhotoUrl = url || 'assets/images/placeholder.png';
+          });
+        }
+
         this.bikeLoading = false;
       },
       error: (error: ApiErrorResponse) => {

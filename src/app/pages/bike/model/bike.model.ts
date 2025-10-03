@@ -3,6 +3,8 @@ import { Money } from "src/app/shared/models/money";
 export interface BikeList {
   uuid: string;
   name: string;
+  photo?: string;
+  previewUrl: string;
 }
 
 export interface BikeDetails {
@@ -15,6 +17,7 @@ export interface BikeDetails {
   serialNumber?: string;
   mileageKm?: string;
   description?: string;
+  photo?: string;
   createdDate: Date;
   lastModifiedDate?: Date;
 }

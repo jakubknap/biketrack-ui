@@ -102,7 +102,7 @@ export class RepairEditModalComponent implements OnInit {
 
   onFilesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (!input.files) return;
+    if (!input.files || input.files.length === 0) return;
 
     const selectedFiles = Array.from(input.files);
     this.photoErrors = [];
