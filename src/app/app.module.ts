@@ -31,6 +31,7 @@ import { RepairDeleteModalComponent } from './pages/repair/modals/repair-delete-
 import { RepairDetailsModalComponent } from './pages/repair/modals/repair-details-modal/repair-details-modal.component';
 import { EmptyToNullDirective } from './shared/directives/empty-to-null.directive';
 import { BikeDetailsComponent } from './pages/bike/bike-details/bike-details.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
 
 registerLocaleData(localePl);
 
@@ -60,7 +61,8 @@ registerLocaleData(localePl);
     RepairDeleteModalComponent,
     RepairDetailsModalComponent,
     EmptyToNullDirective,
-    BikeDetailsComponent
+    BikeDetailsComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,

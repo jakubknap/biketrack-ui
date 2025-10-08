@@ -31,6 +31,40 @@
       </div>
 
       <div *ngIf="bike && !bikeLoading && !bikeErrorMessage" class="flex flex-wrap gap-2">
+        <div #dropdownContainer class="relative mr-6">
+          <button type="button" (click)="showReportDropdown = !showReportDropdown" [disabled]="reportLoading" class="bg-white border border-blue-600 text-blue-600 font-semibold px-5 py-2 rounded-lg hover:bg-blue-50 transition flex items-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed">
+            <app-spinner *ngIf="reportLoading"></app-spinner>
+
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18M9 17V9m4 8V5m4 12V7" />
+            </svg>
+
+            Raport
+
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div *ngIf="showReportDropdown" class="absolute left-1/2 -translate-x-1/2 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden animate-fade-in">
+            <button (click)="openReport(); showReportDropdown = false" class="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h8m-8-4h8M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+
+              Otwórz raport
+            </button>
+
+            <button (click)="downloadReport(); showReportDropdown = false" class="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v12m0 0l-4-4m4 4l4-4m-8 8h8" />
+              </svg>
+
+              Pobierz raport
+            </button>
+          </div>
+        </div>
+
         <button (click)="goBack()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
           Wróć
         </button>

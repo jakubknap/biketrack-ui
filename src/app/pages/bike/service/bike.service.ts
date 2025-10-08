@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { BaseService } from '../../../shared/services/base.service';
@@ -87,6 +87,12 @@ export class BikeService extends BaseService {
         return new File([blob], `${photoUuid}.${ext}`, { type: blob.type });
       }),
       catchError(() => of(null))
+    );
+  }
+
+  getBikeReport(bikeUuid: string): Observable<HttpResponse<Blob>> {
+    return this.http.get(`${this.baseUrl}/bikes/${bikeUuid}/report`, { responseType: 'blob', observe: 'response' }).pipe(
+      catchError(this.handleError)
     );
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { BikeDetails, BikeDto, BikeRepair, BikeRepairStatistics } from '../model/bike.model';
 import { RepairDto } from '../../repair/model/repair.model';
 import { ModalCloseStatus } from 'src/app/shared/enums/modal-close-status.enum';
@@ -6,12 +6,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BikeService } from '../service/bike.service';
 import { validate as isValidUUID } from 'uuid';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-bike-details',
   templateUrl: './bike-details.component.html'
 })
 export class BikeDetailsComponent implements OnInit {
+
+  @ViewChild('dropdownContainer') dropdownContainer!: ElementRef;
 
   bikeUuid: string | null = null;
 
@@ -53,9 +56,13 @@ export class BikeDetailsComponent implements OnInit {
 
   selectedRepair: RepairDto | null = null;
 
+  showReportDropdown = false;
+  reportLoading = false;
+
   constructor(private bikeService: BikeService,
               private activatedRoute: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private toastService: ToastService) { }
 
   ngOnInit() {
     this.bikeUuid = this.getBikeUuidFromUrl();
@@ -260,6 +267,61 @@ export class BikeDetailsComponent implements OnInit {
 
   goBack() {
     history.back();
+  }
+
+  openReport(): void {
+    this.reportLoading = true;
+
+    this.bikeService.getBikeReport(this.bike!.bikeUuid).subscribe({
+      next: (response) => {
+        const url = window.URL.createObjectURL(response.body!);
+        this.reportLoading = false;
+        window.open(url, '_blank');
+      },
+      error: () => {
+        this.reportLoading = false;
+        this.toastService.show('Nie udało się wygenerować raportu');
+      }
+    });
+  }
+
+  downloadReport(): void {
+    this.reportLoading = true;
+
+    this.bikeService.getBikeReport(this.bike!.bikeUuid).subscribe({
+      next: (response) => {
+        const blob = response.body!;
+        const contentDisposition = response.headers.get('Content-Disposition');
+
+        let filename = "Raport roweru - " + this.bike?.name + ".pdf";
+
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/);
+          if (match && match[1]) {
+            filename = decodeURIComponent(match[1]);
+          }
+        }
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        this.reportLoading = false;
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.reportLoading = false;
+        this.toastService.show('Nie udało się wygenerować raportu');
+      }
+    });
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  onClickOutside(targetElement: HTMLElement) {
+    if (!this.dropdownContainer?.nativeElement.contains(targetElement)) {
+      this.showReportDropdown = false;
+    }
   }
 
   private getBikeUuidFromUrl(): string | null {
