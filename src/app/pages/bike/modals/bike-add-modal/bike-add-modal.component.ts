@@ -34,14 +34,14 @@ export class BikeAddModalComponent implements OnInit {
 
   ngOnInit() {
     this.addBikeForm = this.formBuilder.group({
-      name: [null, [safeTextValidator, Validators.required]],
-      brand: [null, safeTextValidator],
-      model: [null, safeTextValidator],
-      type: [null, [safeTextValidator, Validators.required]],
+      name: [null, [safeTextValidator, Validators.required, Validators.maxLength(255)]],
+      brand: [null, [safeTextValidator, Validators.maxLength(255)]],
+      model: [null, [safeTextValidator, Validators.maxLength(255)]],
+      type: [null, [safeTextValidator, Validators.required, Validators.maxLength(255)]],
       purchaseDate: [null],
-      serialNumber: [null, safeTextValidator],
-      mileageKm: [null, safeTextValidator],
-      description: [null, safeTextValidator]
+      serialNumber: [null, [safeTextValidator, Validators.maxLength(255)]],
+      mileageKm: [null, [safeTextValidator, Validators.maxLength(255)]],
+      description: [null, [safeTextValidator, Validators.maxLength(255)]]
     });
   }
 

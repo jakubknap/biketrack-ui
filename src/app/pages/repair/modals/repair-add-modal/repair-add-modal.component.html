@@ -110,10 +110,11 @@
                 <label for="title" class="block text-sm font-medium text-gray-700 mb-1">
                     Tytuł
                 </label>
-                <input id="title" formControlName="title" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull/>
+                <input id="title" formControlName="title" type="text" class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull maxlength="255"/>
                 <div *ngIf="title.errors && (title.dirty || title.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="title.errors['required']">Tytuł jest wymagany</div>
                     <div *ngIf="title.errors['pattern']">Tytuł zawiera niedozwolone znaki</div>
+                    <div *ngIf="title.errors['maxlength']">Tytuł nie może mieć więcej niż 255 znaków</div>
                     <div *ngIf="title.errors['backend']">{{ title.errors['backend'] }}</div>
                 </div>
             </div>
@@ -122,9 +123,10 @@
                 <label for="description" class="block text-sm font-medium text-gray-700 mb-1">
                     Opis
                 </label>
-                <textarea id="description" formControlName="description" class="w-full border rounded-md px-3 py-2 min-h-[65px] resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull></textarea>
+                <textarea id="description" formControlName="description" class="w-full border rounded-md px-3 py-2 min-h-[65px] resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" EmptyToNull maxlength="255"></textarea>
                 <div *ngIf="description.errors && (description.dirty || description.touched)" class="mt-1 text-sm text-red-600 space-y-1 break-words">
                     <div *ngIf="description.errors['pattern']">Opis zawiera niedozwolone znaki</div>
+                    <div *ngIf="description.errors['maxlength']">Opis nie może mieć więcej niż 255 znaków</div>
                     <div *ngIf="description.errors['backend']">{{ description.errors['backend'] }}</div>
                 </div>
             </div>

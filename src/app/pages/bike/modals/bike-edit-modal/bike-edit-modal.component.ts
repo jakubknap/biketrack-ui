@@ -49,14 +49,14 @@ export class BikeEditModalComponent implements OnInit {
         this.bikeDetails = response;
 
         this.editBikeForm = this.formBuilder.group({
-          name: [this.bikeDetails.name, [safeTextValidator, Validators.required]],
-          brand: [this.bikeDetails.brand, safeTextValidator],
-          model: [this.bikeDetails.model, safeTextValidator],
-          type: [this.bikeDetails.type, [safeTextValidator, Validators.required]],
+          name: [this.bikeDetails.name, [safeTextValidator, Validators.required, Validators.maxLength(255)]],
+          brand: [this.bikeDetails.brand, [safeTextValidator, Validators.maxLength(255)]],
+          model: [this.bikeDetails.model, [safeTextValidator, Validators.maxLength(255)]],
+          type: [this.bikeDetails.type, [safeTextValidator, Validators.required, Validators.maxLength(255)]],
           purchaseDate: [this.bikeDetails.purchaseDate],
-          serialNumber: [this.bikeDetails.serialNumber, safeTextValidator],
-          mileageKm: [this.bikeDetails.mileageKm, safeTextValidator],
-          description: [this.bikeDetails.description, safeTextValidator]
+          serialNumber: [this.bikeDetails.serialNumber, [safeTextValidator, Validators.maxLength(255)]],
+          mileageKm: [this.bikeDetails.mileageKm, [safeTextValidator, Validators.maxLength(255)]],
+          description: [this.bikeDetails.description, [safeTextValidator, Validators.maxLength(255)]]
         });
 
         this.loadBikePhoto();

@@ -48,8 +48,8 @@ export class RepairAddModalComponent implements OnInit {
     this.addRepairForm = this.formBuilder.group({
       bikeUuid: [this.bikeDto ? this.bikeDto.uuid : null, Validators.required],
       bikeName: [this.bikeDto ? { value: this.bikeDto.name, disabled: true } : null],
-      title: [null, [safeTextValidator, Validators.required]],
-      description: [null, safeTextValidator],
+      title: [null, [safeTextValidator, Validators.required, Validators.maxLength(255)]],
+      description: [null, [safeTextValidator, Validators.maxLength(255)]],
       cost: [null, [Validators.min(0), Validators.pattern(/^-?\d+(\,\d{1,2})?$/)]],
       currency: ['PLN'],
       repairDate: [null]

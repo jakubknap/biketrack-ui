@@ -54,8 +54,8 @@ export class RepairEditModalComponent implements OnInit {
 
         this.editRepairForm = this.formBuilder.group({
           bikeName: [{ value: this.repairDetails.bike.name, disabled: true }],
-          title: [this.repairDetails.title, [safeTextValidator, Validators.required]],
-          description: [this.repairDetails.description, safeTextValidator],
+          title: [this.repairDetails.title, [safeTextValidator, Validators.required, Validators.maxLength(255)]],
+          description: [this.repairDetails.description, [safeTextValidator, Validators.maxLength(255)]],
           cost: [this.repairDetails?.cost?.amount ? this.repairDetails?.cost?.amount.toString().replace('.', ',') : null, [Validators.min(0), Validators.pattern(/^-?\d+(\,\d{1,2})?$/)]],
           currency: [this.repairDetails?.cost?.currency ? this.repairDetails.cost.currency : 'PLN'],
           repairDate: [this.repairDetails.repairDate]
