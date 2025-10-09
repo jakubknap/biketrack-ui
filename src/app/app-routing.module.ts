@@ -15,6 +15,7 @@ import { BikeComponent } from './pages/bike/bike.component';
 import { RepairComponent } from './pages/repair/repair.component';
 import { BikeDetailsComponent } from './pages/bike/bike-details/bike-details.component';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent, canActivate: [noAuthGuard] },
@@ -32,7 +33,8 @@ const routes: Routes = [
       { path: 'bikes', component: BikeComponent },
       { path: 'bikes/:bikeUuid', component: BikeDetailsComponent },
       { path: 'repairs', component: RepairComponent },
-      { path: 'statistics', component: StatisticsComponent }
+      { path: 'statistics', component: StatisticsComponent },
+      { path: 'profile', component: ProfileComponent }
     ]
   },
   { path: '**', component: NotFoundComponent }

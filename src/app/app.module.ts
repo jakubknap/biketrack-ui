@@ -31,8 +31,10 @@ import { RepairDeleteModalComponent } from './pages/repair/modals/repair-delete-
 import { RepairDetailsModalComponent } from './pages/repair/modals/repair-details-modal/repair-details-modal.component';
 import { EmptyToNullDirective } from './shared/directives/empty-to-null.directive';
 import { BikeDetailsComponent } from './pages/bike/bike-details/bike-details.component';
-import { ToastComponent } from './shared/components/toast/toast.component';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 registerLocaleData(localePl);
 
@@ -63,14 +65,18 @@ registerLocaleData(localePl);
     RepairDetailsModalComponent,
     EmptyToNullDirective,
     BikeDetailsComponent,
-    ToastComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+    }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

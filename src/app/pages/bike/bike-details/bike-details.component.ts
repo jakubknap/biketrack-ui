@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BikeService } from '../service/bike.service';
 import { validate as isValidUUID } from 'uuid';
 import { ApiErrorResponse } from 'src/app/shared/models/api-response';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-bike-details',
@@ -62,7 +62,7 @@ export class BikeDetailsComponent implements OnInit {
   constructor(private bikeService: BikeService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private toastService: ToastService) { }
+              private toastr: ToastrService) { }
 
   ngOnInit() {
     this.bikeUuid = this.getBikeUuidFromUrl();
@@ -117,7 +117,7 @@ export class BikeDetailsComponent implements OnInit {
           this.globalLoading = false;
           this.globalErrorMessage = 'Ups! Ten rower nie istnieje lub link jest nieprawidłowy.';
           return;
-        };
+        }
 
         this.bikeErrorMessage = 'Nie udało się pobrać danych z serwera.';
         this.bikeLoading = false;
@@ -280,7 +280,7 @@ export class BikeDetailsComponent implements OnInit {
       },
       error: () => {
         this.reportLoading = false;
-        this.toastService.show('Nie udało się wygenerować raportu');
+        this.toastr.error('Nie udało się wygenerować raportu')
       }
     });
   }
@@ -312,7 +312,7 @@ export class BikeDetailsComponent implements OnInit {
       },
       error: () => {
         this.reportLoading = false;
-        this.toastService.show('Nie udało się wygenerować raportu');
+        this.toastr.error('Nie udało się wygenerować raportu')
       }
     });
   }

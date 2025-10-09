@@ -1,0 +1,106 @@
+<main class="flex-grow flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-2xl">
+        <div class="bg-white shadow-xl rounded-xl p-6 sm:p-8 text-[15px] sm:text-base">
+            <div class="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-800">Mój profil</h1>
+                </div>
+
+                <div class="flex flex-wrap gap-2 sm:gap-3">
+                    <button *ngIf="!loading && !errorMessage && !profileEditing" (click)="enterEdit()" class="px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-center bg-blue-600 text-white text-sm sm:text-base rounded-md hover:bg-blue-700 transition-colors font-medium">
+                        Edytuj
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="!loading && errorMessage" class="flex justify-center py-8">
+                <div class="bg-red-50 border border-red-200 rounded-xl p-3 text-center max-w-md shadow-md">
+                    <svg class="mx-auto mb-4 w-10 sm:w-12 h-10 sm:h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12c0 4.9706-4.0294 9-9 9s-9-4.0294-9-9 4.0294-9 9-9 9 4.0294 9 9z" />
+                    </svg>
+
+                    <p class="text-red-700 text-base sm:text-lg mb-4">{{ errorMessage }}</p>
+
+                    <button (click)="getUserDetails()" class="bg-red-600 text-white text-sm sm:text-base px-4 py-1.5 rounded-lg hover:bg-red-700 transition font-semibold">
+                        Spróbuj ponownie
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="!loading && !errorMessage">
+                <form [formGroup]="profileEditForm" (ngSubmit)="saveProfile()" novalidate class="mt-5 space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="nickname" class="block text-sm font-medium text-gray-700 mb-1">
+                                Nazwa użytkownika
+                            </label>
+                            <input id="nickname" formControlName="nickname" [readonly]="!profileEditing" type="text" autocomplete="username" class="w-full border rounded-md px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base" />
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                                E-mail
+                            </label>
+                            <input id="email" formControlName="email" [readonly]="!profileEditing" type="email" autocomplete="email" class="w-full border rounded-md px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base" />
+                        </div>
+                    </div>
+
+                    <div *ngIf="!profileEditing" class="text-xs sm:text-sm text-gray-500">
+                        Kliknij „Edytuj”, aby wprowadzić zmiany
+                    </div>
+
+                    <div *ngIf="profileEditing" class="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4">
+                        <button (click)="cancelProfileEdit()" [disabled]="profileSaving" class="px-4 sm:px-6 py-1.5 sm:py-2 rounded-md border text-sm sm:text-base disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            Anuluj
+                        </button>
+
+                        <button type="submit" [disabled]="profileSaving || profileEditForm.invalid" class="px-4 sm:px-6 py-1.5 sm:py-2 flex items-center justify-center bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium text-sm sm:text-base disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            <app-spinner *ngIf="profileSaving"></app-spinner>
+                            <span>{{ profileSaving ? 'Zapisywanie...' : 'Zapisz' }}</span>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-8 border-t pt-5">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-800">Bezpieczeństwo</h2>
+                            <p class="text-xs sm:text-sm text-gray-500">Zmień hasło do konta</p>
+                        </div>
+
+                        <button *ngIf="!passwordChangeFormOpen" (click)="togglePasswordChangeForm()" class="px-3 sm:px-4 py-1.5 sm:py-2 flex items-center justify-center bg-blue-600 text-white text-sm sm:text-base rounded-md hover:bg-blue-700 transition-colors font-medium">
+                            Zmień hasło
+                        </button>
+                    </div>
+
+                    <form *ngIf="passwordChangeFormOpen" [formGroup]="passwordChangeForm" (ngSubmit)="changePassword()" novalidate class="mt-4 space-y-4">
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                                Nowe hasło
+                            </label>
+                            <input id="password" formControlName="password" type="password" autocomplete="new-password" class="w-full border rounded-md px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base" />
+                        </div>
+
+                        <div>
+                            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+                                Powtórz nowe hasło
+                            </label>
+                            <input id="confirmPassword" formControlName="confirmPassword" type="password" autocomplete="new-password" class="w-full border rounded-md px-3 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base" />
+                        </div>
+
+                        <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4">
+                            <button (click)="togglePasswordChangeForm()" [disabled]="passwordSaving" class="px-4 sm:px-6 py-1.5 sm:py-2 rounded-md border text-sm sm:text-base disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                Anuluj
+                            </button>
+
+                            <button type="submit" [disabled]="passwordSaving || passwordChangeForm.invalid" class="px-4 sm:px-6 py-1.5 sm:py-2 flex items-center justify-center bg-blue-600 text-white text-sm sm:text-base rounded-md hover:bg-blue-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                <app-spinner *ngIf="passwordSaving"></app-spinner>
+                                <span>{{ passwordSaving ? 'Przetwarzanie...' : 'Zmień hasło' }}</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
