@@ -32,6 +32,7 @@ import { RepairDetailsModalComponent } from './pages/repair/modals/repair-detail
 import { EmptyToNullDirective } from './shared/directives/empty-to-null.directive';
 import { BikeDetailsComponent } from './pages/bike/bike-details/bike-details.component';
 import { ToastComponent } from './shared/components/toast/toast.component';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 registerLocaleData(localePl);
 
@@ -62,7 +63,8 @@ registerLocaleData(localePl);
     RepairDetailsModalComponent,
     EmptyToNullDirective,
     BikeDetailsComponent,
-    ToastComponent
+    ToastComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,

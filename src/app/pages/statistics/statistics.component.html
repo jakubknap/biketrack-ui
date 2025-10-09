@@ -1,0 +1,68 @@
+<div class="p-6 bg-gray-50 rounded-lg shadow space-y-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center sm:text-left">Statystyki rowerów</h2>
+
+    <div *ngIf="errorMessage && !loading" class="flex flex-col items-center justify-center p-6 bg-red-50 border border-red-200 rounded-lg text-center text-red-700">
+        <svg class="w-12 h-12 mb-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="mb-4 font-medium">{{ errorMessage }}</p>
+        <button (click)="retry()" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-medium">
+            <span *ngIf="!loading">Spróbuj ponownie</span>
+            <span *ngIf="loading">Ładowanie...</span>
+        </button>
+    </div>
+
+    <div *ngIf="loading && !errorMessage" class="space-y-6 animate-pulse">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                <div class="h-8 bg-gray-200 rounded w-20"></div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                <div class="h-8 bg-gray-200 rounded w-20"></div>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                <div class="h-8 bg-gray-200 rounded w-20"></div>
+            </div>
+        </div>
+        <div class="h-64 bg-gray-200 rounded-lg"></div>
+    </div>
+
+    <div *ngIf="!loading && !errorMessage">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white p-4 rounded-lg shadow text-center">
+                <p class="text-gray-600">Twoje rowery</p>
+                <p class="text-3xl font-bold text-blue-600">{{ summary.totalBikes }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow text-center">
+                <p class="text-gray-600">Wszystkie naprawy</p>
+                <p class="text-3xl font-bold text-blue-600">{{ summary.totalRepairs }}</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow text-center">
+                <p class="text-gray-600">Łączny koszt napraw</p>
+                <p class="text-3xl font-bold text-blue-600">
+                    {{ (summary.totalRepairCost.amount | number:'1.2-2') || '0,00' }} {{ (summary.totalRepairCost.currency | formatCurrency) || 'zł' }}
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-4 rounded-lg shadow w-full">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2 text-center md:text-left">Liczba napraw per rower</h3>
+                <canvas #repairsPerBikeChart class="w-full h-64 sm:h-72"></canvas>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow w-full">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2 text-center md:text-left">Średni koszt naprawy per rower</h3>
+                <canvas #averageRepairCostChart class="w-full h-64 sm:h-72"></canvas>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow w-full">
+                <h3 class="text-lg font-semibold text-gray-700 mb-2 text-center md:text-left">Naprawy w tym roku per miesiąc</h3>
+                <canvas #repairsThisYearChart class="w-full h-64 sm:h-72"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

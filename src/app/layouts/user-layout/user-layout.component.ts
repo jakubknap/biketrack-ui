@@ -33,7 +33,7 @@ export class UserLayoutComponent {
     { label: 'Przegląd', link: '/dashboard' },
     { label: 'Rowery', link: '/bikes' },
     { label: 'Naprawy', link: '/repairs' },
-    { label: 'Statystyki', link: '/stats' },
+    { label: 'Statystyki', link: '/statistics' },
     { label: 'Profil', link: '/profile' }
   ];
 }

@@ -14,6 +14,7 @@ import { UserLayoutComponent } from './layouts/user-layout/user-layout.component
 import { BikeComponent } from './pages/bike/bike.component';
 import { RepairComponent } from './pages/repair/repair.component';
 import { BikeDetailsComponent } from './pages/bike/bike-details/bike-details.component';
+import { StatisticsComponent } from './pages/statistics/statistics.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent, canActivate: [noAuthGuard] },
@@ -30,10 +31,11 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'bikes', component: BikeComponent },
       { path: 'bikes/:bikeUuid', component: BikeDetailsComponent },
-      { path: 'repairs', component: RepairComponent }
+      { path: 'repairs', component: RepairComponent },
+      { path: 'statistics', component: StatisticsComponent }
     ]
   },
-  { path: '**', component: NotFoundComponent },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
