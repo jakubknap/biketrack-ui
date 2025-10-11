@@ -26,8 +26,7 @@ export class AccountActivationComponent implements OnInit {
   message: string | null = null;
 
   constructor(private route: ActivatedRoute,
-              private authService: AuthService) {
-  }
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     const token = this.token;

@@ -14,7 +14,7 @@ export class DashboardComponent implements OnInit {
   errorMessage: string | null = null;
 
   constructor(private dashboardService: DashboardService,
-    private router: Router) { }
+              private router: Router) { }
 
   ngOnInit(): void {
     this.fetchData();

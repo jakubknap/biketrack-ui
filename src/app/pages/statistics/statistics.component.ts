@@ -21,7 +21,8 @@ export class StatisticsComponent implements AfterViewInit {
   loading = true;
   errorMessage: string | null = null;
 
-  constructor(private statisticsService: StatisticsService, private cdr: ChangeDetectorRef) { }
+  constructor(private statisticsService: StatisticsService,
+              private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     setTimeout(() => this.loadStatistics());
