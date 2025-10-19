@@ -293,7 +293,7 @@ export class BikeDetailsComponent implements OnInit {
         const blob = response.body!;
         const contentDisposition = response.headers.get('Content-Disposition');
 
-        let filename = "Raport roweru - " + this.bike?.name + ".pdf";
+        let filename = "Raport roweru.pdf";
 
         if (contentDisposition) {
           const match = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/);
