@@ -8,9 +8,9 @@ Over the past few years, I have been working professionally as a Java Developer 
 
 If you would like to see how I currently approach software development, I would be happy to discuss my experience during an interview or complete a sample technical task.
 
-⚠️ Uwaga dla rekruterów
-
 ---
+
+⚠️ Uwaga dla rekruterów
 
 Ten projekt został stworzony głównie na potrzeby zaliczenia studiów i nie odzwierciedla mojego obecnego poziomu umiejętności programistycznych ani podejścia do tworzenia oprogramowania.
 
